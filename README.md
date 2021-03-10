@@ -10,7 +10,7 @@
   After approval and publishing to a public repository, everybody will be able to access the app in 2 ways:
 
   * In https://gefstathiadis.shinyapps.io/sankey-app after deployment
-  * Through `shiny::runGitHub('sankey-app', 'GeorgeEfstathiadis')`
+  * Through `shiny::runGitHub('sankey-app', 'GeorgeEfstathiadis', ref = 'main')`
   
   ## Instructions:
   
