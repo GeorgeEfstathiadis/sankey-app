@@ -1,5 +1,9 @@
 # Sankey App
 
+  [![app](https://img.shields.io/badge/app-Heroku-yellow?style=flat&labelColor=gray)](https://sankey-treatment-patterns.herokuapp.com/)
+  [![repo](https://img.shields.io/badge/repo-GitHub-success?style=flat&labelColor=gray)](https://github.com/GeorgeEfstathiadis/sankey-app)
+
+
   ## Introduction
 
   This app was developed to visualise treatment patterns in clinical trials. Later it was developed further to now host any kind of data that contain flow patterns that
