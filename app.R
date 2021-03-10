@@ -1,5 +1,7 @@
 library(shiny)
 
+source('init.R')
+
 port <- Sys.getenv('PORT')
 
 shiny::runApp(
