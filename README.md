@@ -7,10 +7,10 @@
     
   ## How to run the app:
   
-  After approval and publishing to a public repository, everybody will be able to access the app in 2 ways:
+  You can run the app in 2 ways:
 
-  * In https://gefstathiadis.shinyapps.io/sankey-app after deployment
-  * Through `shiny::runGitHub('sankey-app', 'GeorgeEfstathiadis', ref = 'main')`
+  * It is deployed with heroku [here](https://sankey-treatment-patterns.herokuapp.com/)
+  * Run locally with the following command: `shiny::runGitHub('sankey-app', 'GeorgeEfstathiadis', ref = 'main')`
   
   ## Instructions:
   
