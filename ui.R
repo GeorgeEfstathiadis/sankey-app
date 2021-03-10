@@ -38,7 +38,7 @@ ui <- dashboardPage(
     htmlOutput('d3tip', container = tags$script, src = 'https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js'),
     htmlOutput('d3transition', container = tags$script, src = 'https://d3js.org/d3-transition.v2.min.js'),
 
-    tags$script(src = "keepalive.js")
+    tags$script(src = "keepalive.js"),
     tags$head(
       tags$style(HTML("hr {border-top: 1px solid #000000}")),
       tags$style(HTML("#keep_alive {visibility: hidden;}")),
