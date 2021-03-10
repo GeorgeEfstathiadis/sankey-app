@@ -26,7 +26,7 @@ server <- function(input, output, session){
   options(dplyr.summarise.inform = FALSE)
   # load R template for download
   myDir <- tempdir()
-  file.copy('temp_wide.R', myDir)
+  file.copy('www/temp_wide.R', myDir)
 
   # Need server to not prompt H15 error in heroku
   output$keep_alive <- renderText({
