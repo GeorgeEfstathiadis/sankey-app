@@ -38,22 +38,11 @@ ui <- dashboardPage(
     htmlOutput('d3tip', container = tags$script, src = 'https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js'),
     htmlOutput('d3transition', container = tags$script, src = 'https://d3js.org/d3-transition.v2.min.js'),
 
-    tags$script(src = "keepalive.js"),
+    tags$script(src = "JS/keepalive.js"),
     tags$head(
-      tags$style(HTML("hr {border-top: 1px solid #000000}")),
-      tags$style(HTML("#keep_alive {visibility: hidden;}")),
-      tags$style(HTML(".noselect {
-                          -webkit-touch-callout: none; /* iOS Safari */
-                            -webkit-user-select: none; /* Safari */
-                             -khtml-user-select: none; /* Konqueror HTML */
-                               -moz-user-select: none; /* Old versions of Firefox */
-                                -ms-user-select: none; /* Internet Explorer/Edge */
-                                    user-select: none; /* Non-prefixed version, currently
-                                                          supported by Chrome, Edge, Opera and Firefox */
-                        }"
-      ))
+      tags$link(rel = "stylesheet", type = "text/css", href = "CSS/style.css")
+      ),
 
-    ),
     ## Pages
     tabItems(
       source(file.path("ui", "inputs_tab.R"),  local = TRUE)$value,      

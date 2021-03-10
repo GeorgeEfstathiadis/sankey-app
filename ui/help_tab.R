@@ -1,7 +1,10 @@
 tabItem(tabName = "help",
-              box(h2('Input Data (csv, sas7bdat or xlsx file)', style = 'color:steelblue;text-decoration: underline;text-decoration-color: steelblue;'),
+              box(markdown("**App deployed here**: [![app](https://img.shields.io/badge/app-Heroku-yellow?style=flat&labelColor=gray)](https://sankey-treatment-patterns.herokuapp.com/)  
+                            **Code can be found here**: [![repo](https://img.shields.io/badge/repo-GitHub-success?style=flat&labelColor=gray)](https://github.com/GeorgeEfstathiadis/sankey-app)"),
+                width = 12),
+              box(h2('Input Data (csv, sas7bdat or xlsx file)'),
                   br(),
-                  h3('Required Columns', style = 'color:steelblue;text-decoration: underline;text-decoration-color: steelblue;'),
+                  h3('Required Columns'),
                   br(),
                   HTML('<p>
                           <b>USUBJID</b>: Unique subject id for each person.<br>
@@ -12,18 +15,18 @@ tabItem(tabName = "help",
                          Thus, the data should include for each unique id where did it start and where it ended at each timepoint (path no.).
                          </p>'),
                   br(),
-                  h3('Optional Columns', style = 'color:steelblue;text-decoration: underline;text-decoration-color: steelblue;'),
+                  h3('Optional Columns'),
                   HTML('<p>
                           <b>PATHNAME</b>:  An encoding for the names of each path (e.g. for PATHNO 1, PATHNAME is DAY1). Make sure PATHNAME is correctly mapped to PATHNO.<br>
                          <b>FILTERS</b>: Any kind of filters.<br>
                          </p>'),
                   br(),
                   width = 12),
-              fluidRow(box(h4('Final Dataset Format', style = 'color:steelblue;text-decoration: underline;text-decoration-color: steelblue;'),
+              fluidRow(box(h4('Final Dataset Format'),
                            img(src='data_example.png', height="50%", width="70%")),
-                       box(h4('Sankey Output', style = 'color:steelblue;text-decoration: underline;text-decoration-color: steelblue;'),
+                       box(h4('Sankey Output'),
                            img(src='output_example.png',height="50%", width="70%"))),
-              fluidRow(box(h2('Information on transforming your data in our format', style = 'color:steelblue;text-decoration: underline;text-decoration-color: steelblue;'),
+              fluidRow(box(h2('Information on transforming your data in our format'),
                 br(),
                 HTML('<p>
                          If data in wide format, meaning one row per subject and a column per timepoint you may use the following template to convert your data in R and prepare them for use.
