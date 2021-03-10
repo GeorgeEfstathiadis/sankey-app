@@ -1,3 +1,5 @@
+source('init.R')
+
 library(shiny, warn.conflicts = FALSE)
 library(shinydashboard, warn.conflicts = FALSE)
 library(shinyWidgets, warn.conflicts = FALSE)
