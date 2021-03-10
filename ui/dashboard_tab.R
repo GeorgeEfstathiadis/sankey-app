@@ -1,0 +1,17 @@
+tabItem(tabName = "dashboard",
+              fluidRow(column(6,h3(htmlOutput("days"), align = "left")),
+                       column(6,tags$button(tags$span(h3("Number of Patients", align="right"),
+                                                      h2(htmlOutput("no_of_patients"), align="center"), style = "color:red"),
+                                            type="btn", style = "float:right",width="50%"))),
+              sankeyNetworkOutput("SankeyPlot", width = "100%", height = "700px")%>% withSpinner(color="#0dc5c1"),
+              br(),
+              br(),
+              br(),
+              br(),
+              br(),
+              br(),
+              br(),
+              hr(),
+              fluidRow(column(6,highchartOutput("BarS")),
+                       column(6,highchartOutput("BarE")))
+      )
