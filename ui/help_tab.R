@@ -30,6 +30,7 @@ tabItem(tabName = "help",
                          </p>'),
                 downloadButton("download_wide",
                               label = "Template"),
+                textOutput("keep_alive")
                 width = 12))
               
               
