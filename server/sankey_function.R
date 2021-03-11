@@ -1,5 +1,5 @@
 # Sankey network creation
-  sankey_gen <- function(){
+  sankey_gen <- function(html = FALSE){
     
     if (input$update == 0){
       return()
@@ -301,7 +301,11 @@
           }
         }
         links$color <-link_col
-        my_color <- paste("d3.scaleOrdinal().domain(['1','2','3','4','a','b']).range(['",isolate(input$color_1),"','",isolate(input$color_2),"','",isolate(input$color_3),"','",isolate(input$color_4),"','#ff4500','rgb(0,0,0)'])", sep = "")
+        my_color <- paste0("d3.scaleOrdinal().domain(['1','2','3','4','a','b']).range(['",isolate(input$color_1),"','",isolate(input$color_2),"','",isolate(input$color_3),"','",isolate(input$color_4),"','#ff4500','rgb(0,0,0)'])")
+        if (html){
+          my_color <- my_color %>% 
+            str_replace('rgb\\(0,0,0\\)', 'rgb(0,0,0,.2)')
+        }
         link_group <- "color"                  
       } else {
         link_group <- NULL

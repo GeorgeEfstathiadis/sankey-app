@@ -653,12 +653,10 @@ server <- function(input, output, session){
   ## download sankey in HTML
   output$download <- downloadHandler(
     filename = function() {
-      paste('sankey-network-', Sys.Date(), '.png', sep='')
+      paste('sankey-network-', Sys.Date(), '.html', sep='')
     },
     content = function(file){
-    	myDir2 <- tempdir()
-      	sankey_gen() %>% saveNetwork(paste0(myDir2, '/sn.html'))
-      	webshot(paste0(myDir2, '/sn.html'), file)
+      sankey_gen(html = TRUE) %>% saveNetwork(file)
     }
   )
 
