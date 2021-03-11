@@ -1,6 +1,6 @@
 my_packages <- c("shiny", "shinydashboard", "shinycssloaders", "shinyBS",
 	"shinyWidgets", "networkD3", "highcharter", "DT", "htmltools", "htmlwidgets",
-	"dplyr", "stringr", "readxl", "haven", "RColorBrewer", "webshot")
+	"dplyr", "stringr", "readxl", "haven", "RColorBrewer")
 
 install_if_missing <- function(p){
 	if (p %in% rownames(installed.packages()) == FALSE){
@@ -9,4 +9,3 @@ install_if_missing <- function(p){
 }
 
 invisible(sapply(my_packages, install_if_missing))
-webshot::install_phantomjs()

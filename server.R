@@ -18,8 +18,6 @@ library(highcharter, warn.conflicts = FALSE)
 library(RColorBrewer, warn.conflicts = FALSE)
 library(DT, warn.conflicts = FALSE)
 
-library(webshot, warn.conflicts = FALSE)
-
 
 server <- function(input, output, session){
   options(shiny.maxRequestSize=500*1024^2)
