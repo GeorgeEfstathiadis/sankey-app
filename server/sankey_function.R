@@ -393,12 +393,49 @@
                         
                         let link = d3.selectAll('.link');
                         link.style('stroke-opacity', 0.901);
-                          
+                        
+                        let linkText = d3.select('svg').append('g');
+                        let data = d3.selectAll('.link').data();
+                        let linkLength = data.length;
+
+                        for (let x = 0; x < linkLength; x++){
+                          let d = data[x];
+                          linkText
+                              .append('text')
+                              .attr('class', 'linkText')
+                              .attr('x', -50 + d.source.x + (d.target.x - d.source.x) / 2)
+                              .attr('y', 50 + d.source.y + d.sy + (d.target.y + d.ty - d.source.y - d.sy) / 2)
+                              .attr('dy', '.35em')
+                              .attr('text-anchor', 'end')
+                              .attr('transform', null)
+                              .text('Origin: ' + d.ORIGIN + '/ ' + d.source.name + ' -> ' + d.target.name + ': ' + d.value)
+                              .attr('font-weight', 'bold')
+                              .attr('text-anchor', 'start')
+                              .attr('opacity', 0);
+                        } 
+                        
+                        let linkShow = false;
+                        d3.select('label[for=\"link_show\"]')
+                          .on('click', d => {
+                            linkShow = !linkShow;
+                            if (linkShow){
+                              d3.selectAll('.linkText')
+                                .attr('opacity', 1)
+                            } else {
+                              d3.selectAll('.linkText')
+                                .attr('opacity', 0)
+                            }
+                          })
+
+
+
                         d3.selectAll('.link')
                           .on('mouseover', function(d){
                             tip1.show(d)
                               .style('pointer-events', 'none')
                               .style('opacity', 0.9);
+
+                            
                               
 
                             //c

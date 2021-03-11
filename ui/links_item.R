@@ -3,6 +3,12 @@ menuItem("Links", icon = icon("th-list", lib='glyphicon'), tabName = "links",
                    label = "Links",
                    value = "No Colour Grouping Applied"
          ),
+
+         materialSwitch('link_show',
+                              label = tags$span(id = "size_label_l", "Show Label sizes"),
+                              status = 'primary',
+                              right = TRUE),
+
          
          materialSwitch("mode_switch",
                         label = tags$span(id = "label_link", "Link Mode Switch"), 
@@ -16,6 +22,10 @@ menuItem("Links", icon = icon("th-list", lib='glyphicon'), tabName = "links",
 
          bsTooltip(id = "label_link",
                 title = 'Color group links by timepoint.'
+                ),
+
+         bsTooltip(id = "size_label_l",
+                title = 'Show link sizes in the link labels.'
                 ),
 
          
