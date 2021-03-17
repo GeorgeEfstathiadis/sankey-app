@@ -9,14 +9,6 @@
     data_sub <- d() %>%
       filter_data()
     
-    ## Remove NAs from filters
-    subjectsIDs <- data_sub[rowSums(is.na(data_sub)) == 0,] %>%
-      pull(USUBJID_ENCODED) %>%
-      unique()
-
-    data_sub <- data_sub %>%
-      filter(USUBJID_ENCODED %in% subjectsIDs)
-
 
     # nodedata
     paths <- data_sub$PATHNO_ENCODED %>% 
