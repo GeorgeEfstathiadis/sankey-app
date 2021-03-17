@@ -238,11 +238,13 @@ server <- function(input, output, session){
         insertUI(
           selector = '#addHere',
           where = 'afterEnd',
-          ui = sliderTextInput(c_name,
+          ui = sliderInput(c_name,
                                label = c, 
-                               choices = prettyNum(minimum:maximum, big.mark = ","),
-                               selected = c(minimum, maximum),
-                               grid = FALSE, dragRange = FALSE)
+                               min = minimum, 
+                               max = maximum,
+                               value = c(minimum, maximum),
+                               ticks = FALSE
+                               )
         )
         
       } else if(type == 'logical' | type == 'factor' | type == 'character'){
@@ -302,11 +304,13 @@ server <- function(input, output, session){
         insertUI(
           selector = '#addHere',
           where = 'afterEnd',
-          ui = sliderTextInput(f_name,
+          ui = sliderInput(f_name,
                                label = f, 
-                               choices = prettyNum(minimum:maximum, big.mark = ","),
-                               selected = c(minimum, maximum),
-                               grid = FALSE, dragRange = FALSE)
+                               min = minimum, 
+                               max = maximum,
+                               value = c(minimum, maximum),
+                               ticks = FALSE
+                               )
         )
         
       } else if(type2 == 'logical' | type2 == 'factor' | type2 == 'character'){
