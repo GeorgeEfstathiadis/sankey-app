@@ -138,6 +138,13 @@ tableDataGen <- function(endpoint){
 
 # Table for Link Size text
 output$LinkSizeTable <- renderDataTable({
+	validate(
+      need(input$data, 'No data loaded')
+    )
+    validate(
+      need(input$update != 0, 'No data loaded')
+    )
+
 	links <- tableDataGen('link') %>%
     	select(PATHNO_ENCODED, ORIGIN, NODE_S_ENCODED, NODE_E_ENCODED, value)
 
@@ -163,6 +170,12 @@ output$LinkSizeTable <- renderDataTable({
 
 # Table for Node Size text
 output$NodeSizeTable <- renderDataTable({
+	validate(
+      need(input$data, 'No data loaded')
+    )
+    validate(
+      need(input$update != 0, 'No data loaded')
+    )
 	nodes <- tableDataGen('node') 
 
     DT::datatable(nodes, 
