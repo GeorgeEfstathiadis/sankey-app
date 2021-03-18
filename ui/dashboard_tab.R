@@ -8,6 +8,28 @@ tabItem(tabName = "dashboard",
               br(),
               br(),
               br(),
+              fluidRow(
+                column(6,
+                  box(DT::dataTableOutput("LinkSizeTable"),
+                    title = "Link Table",
+                    collapsible = TRUE,
+                    collapsed =   TRUE,
+                    width = 12
+                    )
+                  ),
+                column(6,
+                  box(DT::dataTableOutput("NodeSizeTable"),
+                    title = "Node Table",
+                    collapsible = TRUE,
+                    collapsed =   TRUE,
+                    width = 12
+                    )
+                  )
+                ),
+              br(),
+              br(),
+              br(),
+              br(),
               br(),
               br(),
               br(),

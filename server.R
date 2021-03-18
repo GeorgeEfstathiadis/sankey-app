@@ -489,7 +489,7 @@ server <- function(input, output, session){
   }
   
   source(file.path("server", "sankey_function.R"),  local = TRUE)$value
-  
+  source(file.path("server", "linktable_function.R"),  local = TRUE)$value
   source(file.path("server", "bar_function.R"),  local = TRUE)$value
   
 
