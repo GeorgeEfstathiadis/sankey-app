@@ -26,6 +26,15 @@ menuItem("Nodes", icon = icon("th-list", lib='glyphicon'), tabName = "nodes",
                          label = "Colour for No Treatment",
                          choices = c()
                ),
+
+               materialSwitch('node_unique',
+                              label = tags$span(id = "node_unique_label", "Colour Group Nodes"),
+                              status = 'primary',
+                              right = TRUE),
+
+               bsTooltip(id = "node_unique_label",
+                title = 'Colour each unique node differently.'
+                ),
                
                materialSwitch('node_show',
                               label = tags$span(id = "size_label", "Show Node sizes"),

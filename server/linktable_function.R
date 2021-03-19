@@ -123,7 +123,7 @@ tableDataGen <- function(endpoint){
     	filter(PATHNO_ENCODED == max(paths)) %>%
     	group_by(NODE_E_ENCODED) %>%
     	summarise(size = sum(value)) %>%
-    	cbind(max(paths))
+    	cbind(max(paths)+1)
 
     nodes_e <- nodes_e[,c(3,1,2)]
     colnames(nodes_e) <- c('Timepoint', 'Node', 'Size')

@@ -347,7 +347,10 @@ server <- function(input, output, session){
       class()
     if(cl %in% c('integer', "numeric")){
       
-      paths <- data %>% pull(pathno) %>% unique()
+      paths <- data %>% 
+        pull(pathno) %>% 
+        unique() %>%
+        sort()
       numlist <- prettyNum(paths, big.mark = ",")
       
       removeUI(
@@ -451,13 +454,85 @@ server <- function(input, output, session){
     
     return(data)
   }
+
+  # Handle missing data 
+  missing_data <- function(data_sub){
+    path_uniq <- data_sub$PATHNO_ENCODED %>%
+      unique()
+    path_sum <- path_uniq %>%
+      sum()
+
+    data_sub2 <- data_sub %>%
+      group_by(USUBJID_ENCODED) %>%
+      summarise(s2 = sum(PATHNO_ENCODED))
+
+    subjects <- data_sub2[data_sub2$s2 != path_sum,] %>%
+      pull(USUBJID_ENCODED)
+
+    if (length(subjects) != 0){
+      for (subj in subjects){
+        paths <- data_sub %>%
+          filter(USUBJID_ENCODED == subj) %>%
+          pull(PATHNO_ENCODED) %>%
+          unique()
+
+        paths2 <- path_uniq[!(path_uniq %in% paths)]
+        for (path in paths2){
+          if (path == min(path_uniq)){
+            res <- data_sub %>%
+              filter(USUBJID_ENCODED == subj & PATHNO_ENCODED == (path+1)) %>%
+              mutate(NODE_E_ENCODED = NODE_S_ENCODED) %>%
+              mutate(NODE_S_ENCODED = 'Missing')
+
+          } else if (path == max(path_uniq)) {
+            res <- data_sub %>%
+              filter(USUBJID_ENCODED == subj & PATHNO_ENCODED == (path-1)) %>%
+              mutate(NODE_S_ENCODED = NODE_E_ENCODED) %>%
+              mutate(NODE_E_ENCODED = 'Missing')
+          } else {
+            prev <- data_sub %>%
+              filter(USUBJID_ENCODED == subj & PATHNO_ENCODED == (path-1)) %>% 
+              pull(NODE_E_ENCODED)
+
+            if ((path+1) %in% paths){
+              res <- data_sub %>%
+                filter(USUBJID_ENCODED == subj & PATHNO_ENCODED == (path+1)) %>%
+                mutate(NODE_E_ENCODED = NODE_S_ENCODED) %>%
+                mutate(NODE_S_ENCODED = prev[1])
+            } else {
+              res <- data_sub %>%
+                filter(USUBJID_ENCODED == subj & PATHNO_ENCODED == (path-1)) %>%
+                mutate(NODE_S_ENCODED = NODE_E_ENCODED) %>%
+                mutate(NODE_E_ENCODED = 'Missing') 
+
+            }
+            
+          }
+          if ('PATHNAME_ENCODED' %in% colnames(data_sub)){
+              name <- data_sub %>% 
+                filter(PATHNO_ENCODED == path) %>%
+                pull(PATHNAME_ENCODED)
+              res$PATHNAME_ENCODED <- name[1]
+            }
+          res <- res %>% 
+            mutate(PATHNO_ENCODED = path)
+        }
+        data_sub <- data_sub %>% 
+          rbind(res)
+      }
+    }
+
+    return(data_sub)
+  }
   
   # Filter Data (Path Range, Path Percentage and Filters selected)
   filter_data <- function(data){
-    
     data_sub <- data %>%
       filter(PATHNO_ENCODED >= isolate(input$path_range[1]) & PATHNO_ENCODED <= isolate(input$path_range[2]))
     
+    ## Handle missing data
+    data_sub <- missing_data(data_sub)
+
     data_sub <- add_path_perc(data_sub)
     
     data_sub <- data_sub%>%
@@ -611,10 +686,10 @@ server <- function(input, output, session){
                  data <- d()
                  data_sub <- data %>%
                    filter(PATHNO_ENCODED >= isolate(input$path_range[1]) & PATHNO_ENCODED <= isolate(input$path_range[2]))
-                 
-                 
-                 
-                 
+
+
+                 data_sub <- missing_data(data_sub)
+
                  
                  for (f in input$filters){
                    filter_selected <- isolate(input[[paste0(f, '_filter')]])

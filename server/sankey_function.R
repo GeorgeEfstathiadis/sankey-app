@@ -256,36 +256,58 @@
     
     # grouping color 
     treatment <- c()
-    
-    ## groupings for nodes
-    for (x in nodedata_ord$name){
-      if (regexpr(isolate(input$color), x, ignore.case = TRUE)[[1]][1] != -1){
-        treatment <- treatment %>% append("1")
-      }
-      else if (regexpr("(Disc. ?Study)|(Discontinued ?Study)", x, ignore.case = TRUE)[[1]][1] != -1){
-        treatment <- treatment %>% append("3")
-      }
-      else if (regexpr("(No ?Trt.?)|(No ?Treatment)|(None)|(Other)", x, ignore.case = TRUE)[[1]][1] != -1){
-        treatment <- treatment %>% append("4")
-      }
-      else{
-        treatment <- treatment %>% append("2")
-      }
-    }
-    
-    
-    nodedata_ord$group <- treatment
-    
-    
-    my_color <- paste("d3.scaleOrdinal().domain(['1','2','3','4']).range(['",isolate(input$color_1),"','",isolate(input$color_2),"','",isolate(input$color_3),"','",isolate(input$color_4),"'])", sep = "")
-    
-    ## grouping for links
+    ## grouping colours
     rand_colors <- brewer.pal(12, "Paired") %>%
       append(brewer.pal(8, "Dark2")) %>%
       append(brewer.pal(11, "Spectral")) %>%
       append(brewer.pal(11, "PRGn")) %>%
       append(brewer.pal(11, "BrBG")) %>%
       append(brewer.pal(11, "RdGy")) 
+
+    ### Color template 
+    ### d3.scaleOrdinal().domain([{node_groups}, {link_groups}]).range([{node_colours}, {link_colours}])
+    ## groupings for nodes
+
+    if (!isolate(input$node_unique)){
+      for (x in nodedata_ord$name){
+        if (regexpr(isolate(input$color), x, ignore.case = TRUE)[[1]][1] != -1){
+          treatment <- treatment %>% append("1")
+        }
+        else if (regexpr("(Disc. ?Study)|(Discontinued ?Study)", x, ignore.case = TRUE)[[1]][1] != -1){
+          treatment <- treatment %>% append("3")
+        }
+        else if (regexpr("(No ?Trt.?)|(No ?Treatment)|(None)|(Other)|([Mm]issing)", x, ignore.case = TRUE)[[1]][1] != -1){
+          treatment <- treatment %>% append("4")
+        }
+        else{
+          treatment <- treatment %>% append("2")
+        }
+      }
+    
+    
+      nodedata_ord$group <- treatment
+      
+      node_groups <- paste0("'",1:4,"'") %>% 
+        paste(collapse=',')
+
+      node_colours <- paste0("'",c(isolate(input$color_1),isolate(input$color_2),isolate(input$color_3),isolate(input$color_4)),"'") %>% 
+        paste(collapse=',')
+
+    } else {
+      nodedata_ord$group <- nodedata_ord$name
+
+      node_groups2 <- nodedata_ord$group %>%
+        unique()
+      node_groups <- paste0("'",node_groups2,"'") %>% 
+        paste(collapse=',')
+
+      node_colours <- paste0("'", rand_colors[1:length(node_groups2)],"'") %>% 
+        paste(collapse=',')
+    }
+    
+    
+    
+   
     
     if (!isolate(input$mode_switch)){
       if (isolate(input$link_group)!="None" & isolate(input$link_group)!="none" ){
@@ -301,14 +323,26 @@
           }
         }
         links$color <-link_col
-        my_color <- paste0("d3.scaleOrdinal().domain(['1','2','3','4','a','b']).range(['",isolate(input$color_1),"','",isolate(input$color_2),"','",isolate(input$color_3),"','",isolate(input$color_4),"','#ff4500','rgb(0,0,0)'])")
+
+        link_groups <- paste0("'",c('a', 'b'),"'") %>% 
+          paste(collapse=',')
+
+        link_colours <- paste0("'", c('#ff4500','rgb(0,0,0)'),"'") %>% 
+          paste(collapse=',')
+
         if (html){
-          my_color <- my_color %>% 
-            str_replace('rgb\\(0,0,0\\)', 'rgb(0,0,0,.2)')
+          link_colours <- paste0("'", c('#ff4500','rgb(0,0,0,.2)'),"'") %>% 
+            paste(collapse=',')
         }
         link_group <- "color"                  
       } else {
         link_group <- NULL
+
+        link_groups <- paste0("'",c('a', 'b'),"'") %>% 
+          paste(collapse=',')
+
+        link_colours <- paste0("'", c('#ff4500','rgb(0,0,0)'),"'") %>% 
+          paste(collapse=',')
       }
     }else{
       link_group <- "ORIGIN2"     
@@ -327,17 +361,17 @@
       my_groups <- links$ORIGIN2 %>%
         unique()
       
-      my_colors <- rand_colors[1:length(my_groups)] %>% 
+      link_colours <- rand_colors[1:length(my_groups)] %>% 
         paste(., collapse = "','")
       
-      my_groups <- my_groups %>%
+      link_groups <- my_groups %>%
         paste(., collapse = "','")
-      
-      my_color <- paste0("d3.scaleOrdinal().domain(['1','2','3','4','", my_groups, "']).range(['",isolate(input$color_1),"','",isolate(input$color_2),"','",isolate(input$color_3),"','",isolate(input$color_4),"','", my_colors, "'])")
+
+      link_colours <- paste0("'", link_colours, "'")
+      link_groups <- paste0("'", link_groups, "'")
     }
     
-    
-    
+    my_color <- paste0('d3.scaleOrdinal().domain([',node_groups,', ',link_groups,']).range([',node_colours,', ',link_colours,'])')
     #Sankey
     
     sankey <- sankeyNetwork(Links = links, Nodes = nodedata_ord,
