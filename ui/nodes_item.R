@@ -53,6 +53,14 @@ menuItem("Nodes", icon = icon("th-list", lib='glyphicon'), tabName = "nodes",
                bsTooltip(id = "top_label",
                 title = 'Only show the largest nodes and group all others to a single node named "Other".'
                 ),
+
+               checkboxInput('advanced_top',
+                              label = tags$span(id = "advanced_label", 'Advanced Options')),
+
+               bsTooltip(id = "advanced_label",
+                title = 'Configure the top nodes of each timepoint separately.'
+                ),
+
                
                div(id = 'add_top_nodes_slider'),
                

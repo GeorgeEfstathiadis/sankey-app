@@ -651,29 +651,88 @@ server <- function(input, output, session){
   
   
   ## Add a slider for number of top nodes by size when switching node mode
-  observeEvent(input$top_nodes,
+  observeEvent(c(input$top_nodes, input$advanced_top),
                {
                  data_sub <- d() %>%
                    filter_data() %>% 
                    group_by(PATHNO_ENCODED) %>%
-                   summarise(n = n_distinct(NODE_S_ENCODED)) %>%
+                   summarise(n = n_distinct(NODE_S_ENCODED)) 
+
+                 overall_min <- data_sub %>%
                    pull(n) %>%
                    min()
                  
                  if (input$top_nodes){
-                   insertUI(
-                     selector = '#add_top_nodes_slider',
-                     where = 'afterEnd',
-                     ui = sliderTextInput('top_nodes_no',
-                                          label = 'Number of Top Nodes', 
-                                          choices = prettyNum(1:data_sub, big.mark = ","),
-                                          selected = 1,
-                                          grid = FALSE, dragRange = FALSE)
-                   )
+                    if(input$advanced_top){
+                      removeUI(
+                       selector = 'div:has(> #top_nodes_no)'
+                     )
+
+                      last_choices <- d() %>%
+                       filter_data() %>% 
+                       filter(PATHNO_ENCODED == max(PATHNO_ENCODED)) %>%
+                       summarise(n = n_distinct(NODE_E_ENCODED)) %>%
+                       pull(n)
+
+
+                      insertUI(
+                         selector = '#add_top_nodes_slider',
+                         where = 'afterEnd',
+                         ui = sliderTextInput(paste0('top_nodes_no',max(data_sub$PATHNO_ENCODED)+1),
+                                              label = paste0('Number of Top Nodes, Timepoint: ', max(data_sub$PATHNO_ENCODED)+1), 
+                                              choices = prettyNum(1:(last_choices[1]), big.mark = ","),
+                                              selected = 1,
+                                              grid = FALSE, dragRange = FALSE)
+                       )
+
+                      for (p in sort(unique(data_sub$PATHNO_ENCODED),decreasing =TRUE)){
+                        sub_min <- data_sub %>%
+                          filter(PATHNO_ENCODED == p) %>%
+                          pull(n)
+
+                        insertUI(
+                         selector = '#add_top_nodes_slider',
+                         where = 'afterEnd',
+                         ui = sliderTextInput(paste0('top_nodes_no',p),
+                                              label = paste0('Number of Top Nodes, Timepoint: ', p), 
+                                              choices = prettyNum(1:(sub_min[1]), big.mark = ","),
+                                              selected = 1,
+                                              grid = FALSE, dragRange = FALSE)
+                       )
+                      }
+                    } else {
+                      for (p in sort(unique(data_sub$PATHNO_ENCODED))){
+                        removeUI(
+                         selector = paste0('div:has(> #top_nodes_no', p, ')')
+                       )
+                      }
+                      removeUI(
+                         selector = paste0('div:has(> #top_nodes_no', p+1, ')')
+                       )
+
+                      insertUI(
+                       selector = '#add_top_nodes_slider',
+                       where = 'afterEnd',
+                       ui = sliderTextInput('top_nodes_no',
+                                            label = 'Number of Top Nodes', 
+                                            choices = prettyNum(1:(overall_min-1), big.mark = ","),
+                                            selected = 1,
+                                            grid = FALSE, dragRange = FALSE)
+                     )
+                    }
                  }else{
                    removeUI(
                      selector = 'div:has(> #top_nodes_no)'
                    )
+
+                   for (p in sort(unique(data_sub$PATHNO_ENCODED))){
+                      removeUI(
+                       selector = paste0('div:has(> #top_nodes_no', p, ')')
+                     )
+                    }
+                    removeUI(
+                     selector = paste0('div:has(> #top_nodes_no', p+1, ')')
+                    )
                  }
                  
                })
