@@ -17,7 +17,8 @@ tabItem(tabName = "help",
                   br(),
                   h3('Optional Columns'),
                   HTML('<p>
-                          <b>PATHNAME</b>:  An encoding for the names of each path (e.g. for PATHNO 1, PATHNAME is DAY1). Make sure PATHNAME is correctly mapped to PATHNO.<br>
+                          <b>PATHNAME</b>:  An encoding for the names of each path (e.g. for PATHNO 1, PATHNAME is DAY1 - DAY2). Preferable format is of "{start_timepoint} - {end_timepoint}" for aditional functionality. Make sure PATHNAME is correctly mapped to PATHNO.
+<br>
                          <b>FILTERS</b>: Any kind of filters.<br>
                          </p>'),
                   br(),
