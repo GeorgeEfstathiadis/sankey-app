@@ -5,7 +5,7 @@
 
   d3.selectAll('.node').each(function(d,i) {
     let str = d3.select(this).attr("transform");
-    str = str.match("([0-9]*),")[1];
+    str = str.match("([0-9]*\\.?[0-9]*),")[1];
     str = parseFloat(str);
     timex.push(str);
   });

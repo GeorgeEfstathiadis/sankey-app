@@ -630,11 +630,14 @@ server <- function(input, output, session){
   
   
   ## Add a slider for grouping link colors by timepoint when switching link mode
-  observeEvent(input$mode_switch,
+  observeEvent(c(input$mode_switch, input$path_range),
                {
                  data_sub <- d() %>%
                    filter_data()
                  
+                 removeUI(
+                     selector = 'div:has(> #orig_path)'
+                   )
                  if (input$mode_switch){
                    insertUI(
                      selector = '#add_slider_here',
@@ -645,19 +648,17 @@ server <- function(input, output, session){
                                           selected = min(data_sub$PATHNO_ENCODED),
                                           grid = FALSE, dragRange = FALSE)
                    )
-                 }else{
-                   removeUI(
-                     selector = 'div:has(> #orig_path)'
-                   )
                  }
                  
                })
   
   
   ## Add a slider for number of top nodes by size when switching node mode
-  observeEvent(c(input$top_nodes, input$advanced_top),
+  observeEvent(c(input$top_nodes, input$advanced_top, input$path_range),
                {
-                 data_sub <- d() %>%
+
+                 unfiltered <- d()
+                 data_sub <- unfiltered %>%
                    filter_data() %>% 
                    group_by(PATHNO_ENCODED) %>%
                    summarise(n = n_distinct(NODE_S_ENCODED)) 
@@ -665,12 +666,26 @@ server <- function(input, output, session){
                  overall_min <- data_sub %>%
                    pull(n) %>%
                    min()
-                 
-                 if (input$top_nodes){
-                    if(input$advanced_top){
-                      removeUI(
+
+                 removeUI(
                        selector = 'div:has(> #top_nodes_no)'
                      )
+
+                 for (p in sort(unique(unfiltered$PATHNO_ENCODED))){
+                        removeUI(
+                         selector = paste0('div:has(> #top_nodes_no', p, ')')
+                       )
+                      }
+
+                  removeUI(
+                     selector = paste0('div:has(> #top_nodes_no', p+1, ')')
+                   )
+
+
+
+                 if (input$top_nodes){
+                    if(input$advanced_top){
+                      
 
                       last_choices <- d() %>%
                        filter_data() %>% 
@@ -705,15 +720,7 @@ server <- function(input, output, session){
                        )
                       }
                     } else {
-                      for (p in sort(unique(data_sub$PATHNO_ENCODED))){
-                        removeUI(
-                         selector = paste0('div:has(> #top_nodes_no', p, ')')
-                       )
-                      }
-                      removeUI(
-                         selector = paste0('div:has(> #top_nodes_no', p+1, ')')
-                       )
-
+                      
                       insertUI(
                        selector = '#add_top_nodes_slider',
                        where = 'afterEnd',
@@ -724,19 +731,6 @@ server <- function(input, output, session){
                                             grid = FALSE, dragRange = FALSE)
                      )
                     }
-                 }else{
-                   removeUI(
-                     selector = 'div:has(> #top_nodes_no)'
-                   )
-
-                   for (p in sort(unique(data_sub$PATHNO_ENCODED))){
-                      removeUI(
-                       selector = paste0('div:has(> #top_nodes_no', p, ')')
-                     )
-                    }
-                    removeUI(
-                     selector = paste0('div:has(> #top_nodes_no', p+1, ')')
-                    )
                  }
                  
                })

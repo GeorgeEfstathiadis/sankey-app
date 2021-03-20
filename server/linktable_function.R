@@ -6,7 +6,7 @@ tableDataGen <- function(endpoint){
     
     data_sub <- d() %>%
       filter_data()
-    
+
 
     # nodedata
     paths <- data_sub$PATHNO_ENCODED %>% 
@@ -146,12 +146,11 @@ tableDataGen <- function(endpoint){
         merge(path, by = 'name') 
       
       ## order them by size
-      nodedata_1 <- nodedata_1[order(nodedata_1$size),c(2,1,4,3)] 
-      
+      nodedata_1 <- nodedata_1[order(nodedata_1$size, nodedata_1$name),c(2,1,4,3)] 
       ## group nodes by size
       if (isolate(input$top_nodes)){
         if (isolate(input$advanced_top)){
-          top_nodes <- isolate(input[[paste0('top_nodes_no', i)]])
+          top_nodes <- isolate(input[[paste0('top_nodes_no', paths[i])]])
         } else {
           top_nodes <- isolate(input$top_nodes_no)
         }
@@ -181,13 +180,12 @@ tableDataGen <- function(endpoint){
       filter(timepoint == paths[i]+1) %>%
       merge(path, by = 'name') 
     
-    nodedata_1 <- nodedata_1[order(nodedata_1$size),c(2,1,4,3)] 
-    
+    nodedata_1 <- nodedata_1[order(nodedata_1$size, nodedata_1$name),c(2,1,4,3)] 
+
     if (isolate(input$top_nodes)){
       if (isolate(input$advanced_top)){
-        top_nodes <- isolate(input[[paste0('top_nodes_no', i+1)]])
+        top_nodes <- isolate(input[[paste0('top_nodes_no', paths[i]+1)]])
       }
-
       if (top_nodes < nrow(nodedata_1)){
         nodedata_1_top <- nodedata_1[(nrow(nodedata_1)-top_nodes + 1):nrow(nodedata_1),] 
         nodedata_1_bottom <- nodedata_1[1:(nrow(nodedata_1)-top_nodes),] 
