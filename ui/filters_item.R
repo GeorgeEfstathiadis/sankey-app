@@ -22,6 +22,13 @@ menuItem("Filters", icon = icon("th-list", lib='glyphicon'), tabName = "filters"
 
 
                tags$div(id='path_range_here'),
+
+               checkboxInput('timepoint_labels',
+                              label = tags$span(id = "timepoint_label", 'Move Timepoints on graph')),
+
+               bsTooltip(id = "timepoint_label",
+                title = 'If the timepoints extracted from the PATHNAME are of correct format they will be placed on top of the graph.'
+                ),
                
                br()
       )

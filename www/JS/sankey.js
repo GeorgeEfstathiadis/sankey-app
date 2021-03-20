@@ -1,6 +1,34 @@
 
  (el, x) => {
- 
+
+  let timex = [];
+
+  d3.selectAll('.node').each(function(d,i) {
+    let str = d3.select(this).attr("transform");
+    str = str.match("([0-9]*),")[1];
+    str = parseFloat(str);
+    timex.push(str);
+  });
+
+  timex = [...new Set(timex)];
+  let timepoints = d3.select('svg')
+      .select('g')
+
+  let time_labels = 0.0001;
+
+  if (time_labels !== 0.0001 && time_labels.length === timex.length){
+    for (let x = 0; x < timex.length; x++){
+      timepoints
+        .append('text')
+        .attr('transform', 'translate('+(timex[x]-5)+',-5)')
+        .attr('font-size', '1vw')
+        .text(time_labels[x])
+    }
+  }
+  
+
+  
+
   d3.selectAll('title').remove();
   
   let tip1 = d3.tip()

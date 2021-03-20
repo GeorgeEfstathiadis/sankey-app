@@ -8,6 +8,36 @@
     
     data_sub <- d() %>%
       filter_data()
+
+
+    ## Pathname config
+    pathname <- input$pathname
+    
+    if (isolate(input$timepoint_labels)){
+      if (pathname != ''){
+        ## getting dates from unique paths
+        dates <- data_sub %>% 
+          pull(PATHNAME_ENCODED) %>%
+          factor() %>%
+          unique() %>% 
+          droplevels() %>%
+          levels()
+
+        if (str_detect(dates[1], '-')){
+          dates <- dates %>%
+            paste(., collapse = '.') %>% 
+            str_replace_all(.,'\\.[A-Za-z0-9]*', '') %>%
+            str_split(' - ')
+        }  else {
+          date <- ''
+
+          showNotification('Not correct Pathname format, check help page example.', type = 'warning')
+        }
+    } else {
+      dates <- ''
+      showNotification('No Pathname column provided.', type = 'warning')
+    }
+  }
     
 
     # nodedata
@@ -437,6 +467,24 @@
       js_code <- js_code %>% 
         str_replace('//a', "d3.selectAll('.node').select('text').style('font-weight', 'bold').text(d => d.name + ': ' + d.value);")
     }
+
+    ## Timepoints on graph
+    if (isolate(input$timepoint_labels)){
+      if (dates != ''){
+        dates <- dates %>%
+         paste0("'",.,"'") %>% 
+         paste(., collapse=',') %>%
+         paste0("[",.,"]") %>%
+         str_replace("'c\\(", '') %>%
+         str_replace("\\)'", '')
+
+        js_code <- js_code %>% 
+          str_replace('0.0001', dates)
+      }
+      
+    }
+
+
     sankey <- onRender(sankey,js_code)
     
     return(sankey)

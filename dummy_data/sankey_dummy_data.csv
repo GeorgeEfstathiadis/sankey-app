@@ -1,31 +1,31 @@
 USUBJID,NODE_S,NODE_E,PATHNO,PATHNAME,FILTER_Y,FILTER_2
-m8PDtlLB4h,NoTrt,T1,1,day1,Y,13
-m8PDtlLB4h,T1,T1,2,day2,Y,54
-m8PDtlLB4h,T1,T2,3,day3,Y,22
-lnxbM8b6z6,T1,T2,1,day1,,70
-lnxbM8b6z6,T2,NoTrt,2,day2,,100
-lnxbM8b6z6,NoTrt,T1,3,day3,,81
-nbFk9o5oLS,T2,T1,1,day1,,72
-nbFk9o5oLS,T1,T2,2,day2,,82
-nbFk9o5oLS,T2,T2,3,day3,,64
-3vyLLz5nZh,T1,NoTrt,1,day1,Y,76
-3vyLLz5nZh,NoTrt,T2,2,day2,Y,80
-3vyLLz5nZh,T2,NoTrt,3,day3,Y,47
-FxbA5YpEHk,T2,T2,1,day1,,12
-FxbA5YpEHk,T2,T2,2,day2,,0
-FxbA5YpEHk,T2,T1,3,day3,,19
-R3RIn8m3DK,T2,T2,1,day1,,52
-R3RIn8m3DK,T2,T2,2,day2,,56
-R3RIn8m3DK,T2,T1,3,day3,,96
-uMoYIqoOYe,NoTrt,T2,1,day1,,32
-uMoYIqoOYe,T2,T2,2,day2,,31
-uMoYIqoOYe,T2,T1,3,day3,,9
-IljqftXu0f,T1,T2,1,day1,Y,78
-IljqftXu0f,T2,T2,2,day2,Y,44
-IljqftXu0f,T2,NoTrt,3,day3,Y,79
-JMzRy5f52y,T1,T2,1,day1,Y,10
-JMzRy5f52y,T2,T2,2,day2,Y,14
-JMzRy5f52y,T2,T2,3,day3,Y,1
-L0DdF6SZOG,T2,T1,1,day1,Y,30
-L0DdF6SZOG,T1,NoTrt,2,day2,Y,2
-L0DdF6SZOG,NoTrt,T2,3,day3,Y,82
+m8PDtlLB4h,NoTrt,T1,1,day1 - day2,,84
+m8PDtlLB4h,T1,T1,2,day2 - day3,,64
+m8PDtlLB4h,T1,T2,3,day3 - day4,,39
+lnxbM8b6z6,NoTrt,T1,1,day1 - day2,Y,11
+lnxbM8b6z6,T1,T2,2,day2 - day3,Y,43
+lnxbM8b6z6,T2,T2,3,day3 - day4,Y,65
+nbFk9o5oLS,T1,T1,1,day1 - day2,,60
+nbFk9o5oLS,T1,T1,2,day2 - day3,,42
+nbFk9o5oLS,T1,T2,3,day3 - day4,,24
+3vyLLz5nZh,T1,T2,1,day1 - day2,Y,91
+3vyLLz5nZh,T2,T1,2,day2 - day3,Y,35
+3vyLLz5nZh,T1,T1,3,day3 - day4,Y,83
+FxbA5YpEHk,T1,NoTrt,1,day1 - day2,,74
+FxbA5YpEHk,NoTrt,T1,2,day2 - day3,,25
+FxbA5YpEHk,T1,NoTrt,3,day3 - day4,,96
+R3RIn8m3DK,NoTrt,T1,1,day1 - day2,,31
+R3RIn8m3DK,T1,T2,2,day2 - day3,,49
+R3RIn8m3DK,T2,NoTrt,3,day3 - day4,,17
+uMoYIqoOYe,T2,T2,1,day1 - day2,Y,72
+uMoYIqoOYe,T2,NoTrt,2,day2 - day3,Y,26
+uMoYIqoOYe,NoTrt,T1,3,day3 - day4,Y,57
+IljqftXu0f,T1,T2,1,day1 - day2,,22
+IljqftXu0f,T2,T1,2,day2 - day3,,27
+IljqftXu0f,T1,T1,3,day3 - day4,,73
+JMzRy5f52y,NoTrt,NoTrt,1,day1 - day2,Y,56
+JMzRy5f52y,NoTrt,NoTrt,2,day2 - day3,Y,3
+JMzRy5f52y,NoTrt,T1,3,day3 - day4,Y,43
+L0DdF6SZOG,T2,NoTrt,1,day1 - day2,,94
+L0DdF6SZOG,NoTrt,NoTrt,2,day2 - day3,,67
+L0DdF6SZOG,NoTrt,NoTrt,3,day3 - day4,,54

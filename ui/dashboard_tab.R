@@ -1,5 +1,5 @@
 tabItem(tabName = "dashboard",
-              fluidRow(column(6,h3(htmlOutput("days"), align = "left")),
+              fluidRow(column(6,h3(htmlOutput("days"), align = "left", id ='timepoint_extract')),
                        column(6,tags$button(tags$span(h3("Number of Subjects", align="right"),
                                                       h2(htmlOutput("no_of_patients"), align="center"), style = "color:red"),
                                             type="btn", style = "float:right",width="50%"))),

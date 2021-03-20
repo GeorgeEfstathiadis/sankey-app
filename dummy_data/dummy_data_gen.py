@@ -2,9 +2,6 @@ import os
 import pandas as pd
 import random
 
-os.chdir('Desktop')
-
-
 
 ids = ['m8PDtlLB4h',
        'lnxbM8b6z6',
@@ -22,7 +19,7 @@ ids = [i for s in ids for i in s]
 
 pathnos = [n for n in range(1,4)] * 10
 
-d = {1: 'day1', 2: 'day2', 3: 'day3'}
+d = {1: 'day1 - day2', 2: 'day2 - day3', 3: 'day3 - day4'}
 pathname = [d[n] for n in pathnos]
 
 f1 = [random.choice(['', 'Y']) for i in range(10)]

@@ -590,6 +590,10 @@ server <- function(input, output, session){
       return()
     }
     
+    validate(
+      need(!(isolate(input$timepoint_labels)), '')
+      )
+
     data_sub <- d() %>%
       filter_data()
     
