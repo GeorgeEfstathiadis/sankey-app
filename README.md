@@ -37,7 +37,7 @@
 
   ### Optional Columns
 
-  * **PATHNAME**:  An encoding for the names of each path (e.g. for PATHNO 1, PATHNAME is DAY1). Make sure PATHNAME is correctly mapped to PATHNO.
+  * **PATHNAME**:  An encoding for the names of each path (e.g. for PATHNO 1, PATHNAME is DAY1 - DAY2). Preferable format is of "{start_timepoint} - {end_timepoint}" for aditional functionality. Make sure PATHNAME is correctly mapped to PATHNO.
   * **FILTERS**: Any kind of filters to be displayed in the dashboard. 
   
   Final Dataset Format example and Sankey output:
