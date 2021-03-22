@@ -32,6 +32,8 @@ menuItem("Nodes", icon = icon("th-list", lib='glyphicon'), tabName = "nodes",
                               status = 'primary',
                               right = TRUE),
 
+               div(id ='node_unique_after'),
+
                bsTooltip(id = "node_unique_label",
                 title = 'Colour each unique node differently.'
                 ),

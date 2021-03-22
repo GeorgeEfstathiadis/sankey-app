@@ -476,7 +476,7 @@ server <- function(input, output, session){
           pull(PATHNO_ENCODED) %>%
           unique()
 
-        paths2 <- path_uniq[!(path_uniq %in% paths)]
+        paths2 <- sort(path_uniq[!(path_uniq %in% paths)])
         for (path in paths2){
           if (path == min(path_uniq)){
             res <- data_sub %>%
@@ -516,9 +516,11 @@ server <- function(input, output, session){
             }
           res <- res %>% 
             mutate(PATHNO_ENCODED = path)
+          
+          data_sub <- data_sub %>% 
+            rbind(res)
         }
-        data_sub <- data_sub %>% 
-          rbind(res)
+        
       }
     }
 
@@ -780,6 +782,27 @@ server <- function(input, output, session){
                                        choices = prettyNum(seq(0,data_sub,0.1), big.mark = ",")
                  )
                })
+
+
+  ## Legend option
+  observeEvent(input$node_unique, {
+
+    if (isolate(input$node_unique)){
+      insertUI(
+                       selector = '#node_unique_after',
+                       where = 'afterEnd',
+                       ui = checkboxInput('legend',
+                                            label = 'Add Legend'
+                                            )
+                     )
+    } else {
+      removeUI(
+        selector = 'div:has(> div:has(> label:has(> #legend)))'
+        )
+    }
+
+
+  })
   
   
   

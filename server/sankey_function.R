@@ -357,10 +357,12 @@
         paste(collapse=',')
 
     } else {
-      nodedata_ord$group <- nodedata_ord$name
+      nodedata_ord$group <- nodedata_ord$name %>%
+        str_replace_all(' ', '_')
 
       node_groups2 <- nodedata_ord$group %>%
-        unique()
+        unique() %>%
+        str_replace_all(' ', '_')
       node_groups <- paste0("'",node_groups2,"'") %>% 
         paste(collapse=',')
 
@@ -409,18 +411,11 @@
       }
     }else{
       link_group <- "ORIGIN2"     
-      links$ORIGIN2 <- links$ORIGIN 
-      unique_origin <- unique(links$ORIGIN) %>% 
-        sort()
+      links$ORIGIN2 <- links$ORIGIN %>%
+        str_replace_all(' ', '_')
       
-
-      links$ORIGIN2 <- as.character(links$ORIGIN2)
-      for (i in 1:length(unique_origin)){
-        links$ORIGIN2[links$ORIGIN == unique_origin[i]] <- unique_origin[i]
-      }
-      links$ORIGIN2 <- factor(links$ORIGIN2)
       my_groups <- links$ORIGIN2 %>%
-        unique()
+        unique() 
       
       link_colours <- rand_colors[1:length(my_groups)] %>% 
         paste(., collapse = "','")
@@ -481,6 +476,21 @@
       }
       
     }
+
+    ## Legend
+    if (isolate(input$node_unique)){
+      if (isolate(input$legend)){
+        js_code <- js_code %>%
+          str_replace('legend_bool = false', 'legend_bool = true')
+      } else {
+        js_code <- js_code %>%
+          str_replace('legend_bool = true', 'legend_bool = false')
+      }
+    } else {
+      js_code <- js_code %>%
+          str_replace('legend_bool = true', 'legend_bool = false')
+    }
+
 
 
     sankey <- onRender(sankey,js_code)

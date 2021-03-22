@@ -1,6 +1,9 @@
 
  (el, x) => {
 
+  let svg = d3.select('svg');
+
+  /* Timepoints on Graph */
   let timex = [];
 
   d3.selectAll('.node').each(function(d,i) {
@@ -11,7 +14,7 @@
   });
 
   timex = [...new Set(timex)];
-  let timepoints = d3.select('svg')
+  let timepoints = svg
       .select('g')
 
   let time_labels = 0.0001;
@@ -25,7 +28,69 @@
         .text(time_labels[x])
     }
   }
+
+  /* Legend */
+  let legend_bool = false;
+  if (legend_bool){
+    if (d3.selectAll('#legendHere > *')['_groups'][0]['length'] === 0){
+      d3.select('#legendHere')
+        .append('svg')
+        .attr('width', '100%')
+        .attr('length', 'auto');
+    } else {
+      d3.select('#legendHere')
+        .select('svg')
+        .remove();
+
+      d3.select('#legendHere')
+        .append('svg')
+        .attr('width', '100%')
+        .attr('length', 'auto');
+    }
+    
+
+    let legend = d3.select('#legendHere')
+      .select('svg');
+
+    let unique_nodes = [];
+    let unique_colors = [];
+    d3.selectAll('.node').each(function(d,i) {
+      unique_colors.push(d3.select(this).select('rect').style('fill'));
+      unique_nodes.push(d3.select(this).select('text').text());
+    });
+
+    unique_nodes = [...new Set(unique_nodes)];
+    unique_colors = [...new Set(unique_colors)];
+    console.log(unique_nodes)
+    console.log(unique_colors)
+
+    if (unique_colors.length === unique_nodes.length){
+      for (let x = 0; x < unique_nodes.length; x++){
+        let y = Math.floor(x/4);
+        legend.append("circle").attr("cx",60 + 200*y).attr("cy",10 + 30*(x-4*y)).attr("r", 6).style("fill", unique_colors[x])
+        legend.append("text").attr("x", 80 + 200*y).attr("y", 10 + 30*(x-4*y)).text(unique_nodes[x]).style("font-size", "15px").attr("alignment-baseline","middle")
+      }
+    }
+
+    d3.selectAll('.node')
+      .select('text')
+      .attr('opacity', 0);
+  } else {
+    d3.selectAll('.node')
+      .select('text')
+      .attr('opacity', 1);
+
+    if (d3.selectAll('#legendHere > *')['_groups'][0]['length'] !== 0){
+      d3.select('#legendHere')
+        .select('svg')
+        .remove();
+    }
+
+  }
   
+
+
+  /* Tooltip */
 
   
 
@@ -59,18 +124,16 @@
       return d.name + '<br><strong>' + d.value + '</strong> people in this node!';
     });
     
-  d3.select('svg')
-    .call(tip1);
+  svg.call(tip1);
     
-  d3.select('svg')
-    .call(tip2);
+  svg.call(tip2);
 
   
   let link = d3.selectAll('.link');
   link.style('stroke-opacity', 0.901);
   
-  let linkText = d3.select('svg').append('g');
-  let data = d3.selectAll('.link').data();
+  let linkText = svg.append('g');
+  let data = link.data();
   let linkLength = data.length;
 
   
@@ -109,7 +172,7 @@
 
 
 
-  d3.selectAll('.link')
+  link
     .on('mouseover', function(d){
       tip1.show(d)
         .style('pointer-events', 'none')
