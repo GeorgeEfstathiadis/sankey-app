@@ -61,14 +61,42 @@
 
     unique_nodes = [...new Set(unique_nodes)];
     unique_colors = [...new Set(unique_colors)];
-    console.log(unique_nodes)
-    console.log(unique_colors)
-
+    let larg_width = 0;
+    let cur_width = 0;
+    let distance = 0;
+    let y = 0;
     if (unique_colors.length === unique_nodes.length){
       for (let x = 0; x < unique_nodes.length; x++){
-        let y = Math.floor(x/4);
-        legend.append("circle").attr("cx",60 + 200*y).attr("cy",10 + 30*(x-4*y)).attr("r", 6).style("fill", unique_colors[x])
-        legend.append("text").attr("x", 80 + 200*y).attr("y", 10 + 30*(x-4*y)).text(unique_nodes[x]).style("font-size", "15px").attr("alignment-baseline","middle")
+        if (Math.floor(x/4) === y + 1){
+          larg_width = larg_width + 50;
+          distance = distance + larg_width;
+          larg_width = 0;
+        }
+
+        y = Math.floor(x/4);
+        legend.append("circle")
+          .attr("cx",60 + distance)
+          .attr("cy",10 + 30*(x-4*y))
+          .attr("r", 6)
+          .style("fill", unique_colors[x])
+        
+        legend.append("text")
+          .attr("x", 80 + distance)
+          .attr("y", 10 + 30*(x-4*y))
+          .text(unique_nodes[x])
+          .style("font-size", "15px")
+          .attr("alignment-baseline","middle")
+
+        cur_width = legend
+          .selectAll('text')
+          .nodes()[x]
+          .getBBox()
+          .width;
+
+        larg_width = Math.max(larg_width, cur_width);
+
+
+
       }
     }
 
@@ -87,7 +115,8 @@
     }
 
   }
-  
+
+
 
 
   /* Tooltip */
@@ -132,6 +161,8 @@
   let link = d3.selectAll('.link');
   link.style('stroke-opacity', 0.901);
   
+
+  /* Link Text button */
   let linkText = svg.append('g');
   let data = link.data();
   let linkLength = data.length;
