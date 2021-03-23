@@ -264,6 +264,23 @@
       }
     })
 
+  /* Node Labels Hide */
+
+  let nodeHide = false;
+  d3.select('label[for=\"remove_labels\"]')
+    .on('click', d => {
+      nodeHide = !nodeHide;
+      if (nodeHide){
+        d3.selectAll('.node')
+          .select('text')
+          .attr('opacity', 0);
+      } else {
+        d3.selectAll('.node')
+          .select('text')
+          .attr('opacity', 1);
+      }
+    })
+
 
 
   link
@@ -315,6 +332,68 @@
       //f
       
     })
+
+    /* PowerBI click action */
+    d3.selectAll('.node')
+            .select('rect')
+            .style("cursor", "pointer");
+    d3.selectAll('.node')
+      .on("mousedown.drag", null);
+
+    let node_op;
+    d3.selectAll('.node')
+      .on("click", function(d,i){
+        node_op = d3.select(this)
+          .select('rect')
+          .style('opacity');
+        node_op = parseFloat(node_op);
+        allnodes_op = Math.min(parseFloat(d3.selectAll('.node').nodes()[0].firstChild.style.opacity), 
+                              parseFloat(d3.selectAll('.node').nodes()[1].firstChild.style.opacity));
+
+        
+
+        if ((node_op === 0.9 && allnodes_op === 0.9) || (node_op === 0.5)){
+          d3.selectAll('.node')
+            .select('rect')
+            .style('opacity', '0.5')
+
+          d3.selectAll('.node')
+            .select('text')
+            .style('opacity', '0.5')
+
+          d3.select(this)
+            .select('rect')
+            .style('opacity', '0.9')
+
+          d3.select(this)
+            .select('text')
+            .style('opacity', '1')
+
+          let i2 = 0;
+          d3.selectAll('.link').each(d2 => {
+            if (d2.source === d || d2.target == d){
+              d3.selectAll('.link').nodes()[i2].style.strokeOpacity = '0.5';
+              d3.selectAll('.link').nodes()[i2].style.opacity = '';
+            } else {
+              d3.selectAll('.link').nodes()[i2].style.opacity = '0.3';
+            }
+            i2 = i2+1;
+          })
+
+
+        } else if (node_op === 0.9 && allnodes_op === 0.5){
+          d3.selectAll('.node')
+            .select('rect')
+            .style('opacity', '0.9')
+
+          d3.selectAll('.node')
+            .select('text')
+            .style('opacity', '1')
+
+          d3.selectAll('.link')
+            .style('opacity', '')
+        }
+      })
     
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
