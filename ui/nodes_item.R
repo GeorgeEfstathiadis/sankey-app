@@ -27,6 +27,11 @@ menuItem("Nodes", icon = icon("th-list", lib='glyphicon'), tabName = "nodes",
                          choices = c()
                ),
 
+               materialSwitch('remove_labels',
+                              label = tags$span(id = "remove_labels_label", "Hide Node Labels"),
+                              status = 'primary',
+                              right = TRUE),
+
                materialSwitch('node_unique',
                               label = tags$span(id = "node_unique_label", "Colour Group Nodes"),
                               status = 'primary',
