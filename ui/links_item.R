@@ -32,5 +32,18 @@ menuItem("Links", icon = icon("th-list", lib='glyphicon'), tabName = "links",
 
          
          div(id='add_slider_here'),
+
+         materialSwitch("mode_switch2",
+                        label = tags$span(id = "label_link2", "Link Mode Switch 2"), 
+                        status = "primary",
+                        right = TRUE
+         ),
+
+         div(id='add_slider_here2'),
+
+         bsTooltip(id = "label_link2",
+                title = 'Color group links by NODE_S or NODE_E.'
+                ),
+
          br()
 )

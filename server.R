@@ -653,6 +653,29 @@ server <- function(input, output, session){
                  }
                  
                })
+
+  ## Add a select for grouping link colors by NODE_S or NODE_E when switching link mode 2
+  observeEvent(c(input$mode_switch2),
+               {
+                 data_sub <- d() %>%
+                   filter_data()
+                 
+                 removeUI(
+                     selector = 'div:has(> #node_s_e)'
+                   )
+                 if (input$mode_switch2){
+                   insertUI(
+                     selector = '#add_slider_here2',
+                     where = 'afterEnd',
+                     ui = sliderTextInput('node_s_e',
+                                          label = 'Grouping Selection', 
+                                          choices = prettyNum(c('NODE_S', 'NODE_E'), big.mark = ","),
+                                          selected = 'NODE_S',
+                                          grid = FALSE, dragRange = FALSE)
+                   )
+                 }
+                 
+               })
   
   
   ## Add a slider for number of top nodes by size when switching node mode

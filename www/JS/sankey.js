@@ -1,12 +1,21 @@
 
  (el, x) => {
+  d3.select('#SankeyPlot').style('height', '820px')
 
   let svg = d3.select('svg');
+
+  svg.attr('viewBox', "0,0,1287.546875,940")
+  
+  d3.select('#legend_here').remove()
+  svg.append('g').attr('id', 'legend_here');
+
+  let link = d3.selectAll('.link');
+  let node = d3.selectAll('.node');
 
   /* Timepoints on Graph */
   let timex = [];
 
-  d3.selectAll('.node').each(function(d,i) {
+  node.each(function(d,i) {
     let str = d3.select(this).attr("transform");
     str = str.match("([0-9]*\\.?[0-9]*),")[1];
     str = parseFloat(str);
@@ -25,6 +34,7 @@
         .append('text')
         .attr('transform', 'translate('+(timex[x]-5)+',-5)')
         .attr('font-size', '1vw')
+        .attr('font-weight', 'bold')
         .text(time_labels[x])
     }
   }
@@ -33,29 +43,15 @@
 
   let legend_bool = false;
   if (legend_bool){
-    if (d3.selectAll('#legendHere > *')['_groups'][0]['length'] === 0){
-      d3.select('#legendHere')
-        .append('svg')
-        .attr('width', '100%')
-        .attr('length', 'auto');
-    } else {
-      d3.select('#legendHere')
-        .select('svg')
-        .remove();
-
-      d3.select('#legendHere')
-        .append('svg')
-        .attr('width', '100%')
-        .attr('length', 'auto');
-    }
+    d3.select('#legend_here').remove()
+    svg.append('g').attr('id', 'legend_here');
     
 
-    let legend = d3.select('#legendHere')
-      .select('svg');
+    let legend = d3.select('#legend_here');
 
     let unique_nodes = [];
     let unique_colors = [];
-    d3.selectAll('.node').each(function(d,i) {
+    node.each(function(d,i) {
       unique_colors.push(d3.select(this).select('rect').style('fill'));
       unique_nodes.push(d3.select(this).select('text').text());
     });
@@ -77,13 +73,13 @@
         y = Math.floor(x/4);
         legend.append("circle")
           .attr("cx",60 + distance)
-          .attr("cy",10 + 30*(x-4*y))
+          .attr("cy",830 + 30*(x-4*y))
           .attr("r", 6)
           .style("fill", unique_colors[x])
         
         legend.append("text")
           .attr("x", 80 + distance)
-          .attr("y", 10 + 30*(x-4*y))
+          .attr("y", 830 + 30*(x-4*y))
           .text(unique_nodes[x])
           .style("font-size", "15px")
           .attr("alignment-baseline","middle")
@@ -102,25 +98,11 @@
 
 
     if (80+distance>window.innerWidth){
-      if (d3.selectAll('#legendHere > *')['_groups'][0]['length'] === 0){
-        d3.select('#legendHere')
-          .append('svg')
-          .attr('width', '100%')
-          .attr('length', 'auto');
-      } else {
-        d3.select('#legendHere')
-          .select('svg')
-          .remove();
-
-        d3.select('#legendHere')
-          .append('svg')
-          .attr('width', '100%')
-          .attr('length', 'auto');
-      }
+      d3.select('#legend_here').remove()
+      svg.append('g').attr('id', 'legend_here');
       
 
-      legend = d3.select('#legendHere')
-        .select('svg');
+      legend = d3.select('#legend_here');
 
 
       let larg_width = 0;
@@ -138,14 +120,14 @@
           y = Math.floor(x/4);
           legend.append("circle")
             .attr("cx",60 + distance)
-            .attr("cy",10 + 30*(x-4*y))
+            .attr("cy",830 + 30*(x-4*y))
             .attr("r", 6)
             .style("fill", unique_colors[x])
 
           
           legend.append("text")
             .attr("x", 80 + distance)
-            .attr("y", 10 + 30*(x-4*y))
+            .attr("y", 830 + 30*(x-4*y))
             .text((unique_nodes[x].length>10) ? unique_nodes[x].substring(0, 11) + '...' : unique_nodes[x])
             .style("font-size", "15px")
             .attr("alignment-baseline","middle")
@@ -164,20 +146,16 @@
 
     }
 
-    d3.selectAll('.node')
+    node
       .select('text')
       .attr('opacity', 0);
   } else {
-    d3.selectAll('.node')
+    node
       .select('text')
       .attr('opacity', 1);
 
-    if (d3.selectAll('#legendHere > *')['_groups'][0]['length'] !== 0){
-      d3.select('#legendHere')
-        .select('svg')
-        .remove();
-    }
-
+    d3.select('#legend_here').remove()
+    svg.append('g').attr('id', 'legend_here');
   }
 
 
@@ -221,7 +199,6 @@
   svg.call(tip2);
 
   
-  let link = d3.selectAll('.link');
   link.style('stroke-opacity', 0.901);
   
 
@@ -271,11 +248,11 @@
     .on('click', d => {
       nodeHide = !nodeHide;
       if (nodeHide){
-        d3.selectAll('.node')
+        node
           .select('text')
           .attr('opacity', 0);
       } else {
-        d3.selectAll('.node')
+        node
           .select('text')
           .attr('opacity', 1);
       }
@@ -305,7 +282,7 @@
   
   //a
   
-  d3.selectAll('.node')
+  node
     .on('mouseover', function(d){
       tip2.style('opacity', 0.9)
         .show(d)
@@ -334,30 +311,30 @@
     })
 
     /* PowerBI click action */
-    d3.selectAll('.node')
-            .select('rect')
-            .style("cursor", "pointer");
-    d3.selectAll('.node')
+    node
+      .select('rect')
+      .style("cursor", "pointer");
+    node
       .on("mousedown.drag", null);
 
     let node_op;
-    d3.selectAll('.node')
+    node
       .on("click", function(d,i){
         node_op = d3.select(this)
           .select('rect')
           .style('opacity');
         node_op = parseFloat(node_op);
-        allnodes_op = Math.min(parseFloat(d3.selectAll('.node').nodes()[0].firstChild.style.opacity), 
-                              parseFloat(d3.selectAll('.node').nodes()[1].firstChild.style.opacity));
+        allnodes_op = Math.min(parseFloat(node.nodes()[0].firstChild.style.opacity), 
+                              parseFloat(node.nodes()[1].firstChild.style.opacity));
 
         
 
         if ((node_op === 0.9 && allnodes_op === 0.9) || (node_op === 0.5)){
-          d3.selectAll('.node')
+          node
             .select('rect')
             .style('opacity', '0.5')
 
-          d3.selectAll('.node')
+          node
             .select('text')
             .style('opacity', '0.5')
 
@@ -370,28 +347,31 @@
             .style('opacity', '1')
 
           let i2 = 0;
-          d3.selectAll('.link').each(d2 => {
+          link.each(d2 => {
             if (d2.source === d || d2.target == d){
-              d3.selectAll('.link').nodes()[i2].style.strokeOpacity = '0.5';
-              d3.selectAll('.link').nodes()[i2].style.opacity = '';
+              link.nodes()[i2].style.strokeOpacity = '0.5';
+              link.nodes()[i2].style.opacity = '';
             } else {
-              d3.selectAll('.link').nodes()[i2].style.opacity = '0.3';
+              link.nodes()[i2].style.opacity = '0.3';
             }
             i2 = i2+1;
           })
 
 
         } else if (node_op === 0.9 && allnodes_op === 0.5){
-          d3.selectAll('.node')
+          node
             .select('rect')
             .style('opacity', '0.9')
 
-          d3.selectAll('.node')
+          node
             .select('text')
             .style('opacity', '1')
 
-          d3.selectAll('.link')
+          link
             .style('opacity', '')
+
+          link
+            .style('stroke-opacity', '0.2')
         }
       })
     

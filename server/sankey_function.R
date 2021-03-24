@@ -374,7 +374,42 @@
     
    
     
-    if (!isolate(input$mode_switch)){
+    if (isolate(input$mode_switch)){
+      link_group <- "ORIGIN2"     
+      links$ORIGIN2 <- links$ORIGIN %>%
+        str_replace_all(' ', '_')
+      
+      my_groups <- links$ORIGIN2 %>%
+        unique() 
+      
+      link_colours <- rand_colors[1:length(my_groups)] %>% 
+        paste(., collapse = "','")
+      
+      link_groups <- my_groups %>%
+        paste(., collapse = "','")
+
+      link_colours <- paste0("'", link_colours, "'")
+      link_groups <- paste0("'", link_groups, "'")
+
+    }else if (isolate(input$mode_switch2)){
+      link_group <- paste0(isolate(input$node_s_e),'_ENCODED2')
+      links[,link_group] <- links[,paste0(isolate(input$node_s_e),'_ENCODED')] %>%
+        str_replace_all(' ', '_')
+      
+      my_groups <- links[,link_group] %>%
+        unique() 
+      
+      link_colours <- rand_colors[1:length(my_groups)] %>% 
+        paste(., collapse = "','")
+      
+      link_groups <- my_groups %>%
+        paste(., collapse = "','")
+
+      link_colours <- paste0("'", link_colours, "'")
+      link_groups <- paste0("'", link_groups, "'")
+
+    }else{
+      
       if (isolate(input$link_group)!="None" & isolate(input$link_group)!="none" ){
         link_col <- c()
         t_node_s <- grepl(isolate(input$link_group), links$NODE_S_ENCODED, ignore.case = TRUE)
@@ -409,22 +444,6 @@
         link_colours <- paste0("'", c('#ff4500','rgb(0,0,0)'),"'") %>% 
           paste(collapse=',')
       }
-    }else{
-      link_group <- "ORIGIN2"     
-      links$ORIGIN2 <- links$ORIGIN %>%
-        str_replace_all(' ', '_')
-      
-      my_groups <- links$ORIGIN2 %>%
-        unique() 
-      
-      link_colours <- rand_colors[1:length(my_groups)] %>% 
-        paste(., collapse = "','")
-      
-      link_groups <- my_groups %>%
-        paste(., collapse = "','")
-
-      link_colours <- paste0("'", link_colours, "'")
-      link_groups <- paste0("'", link_groups, "'")
     }
     
     my_color <- paste0('d3.scaleOrdinal().domain([',node_groups,', ',link_groups,']).range([',node_colours,', ',link_colours,'])')
@@ -446,7 +465,12 @@
     
     
     # Switch js_code if link mode switch is on
-    if (!isolate(input$mode_switch)){
+    if (isolate(input$mode_switch)){
+      
+    } else if (isolate(input$mode_switch2)){
+      js_code <- js_code %>%
+        str_replace('0.901', '0.5')
+    } else {
       js_code <- js_code %>%
         str_replace('0.901', '0.2') %>%
         str_replace('//c', "d3.select(this) .style('stroke-opacity', 0.5);") %>%
@@ -454,6 +478,7 @@
         str_replace('//e', "if(d.x == 0){link.style('stroke-opacity', l => {return l.ORIGIN == d.name ? 0.5 : 0.2;})}") %>%
         str_replace('//f', "link.style('stroke-opacity', 0.2)")
     }
+
     
     ## Show node sizes
     if (isolate(input$node_show)){
