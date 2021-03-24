@@ -250,11 +250,11 @@
       if (nodeHide){
         node
           .select('text')
-          .attr('opacity', 0);
+          .style('opacity', 0);
       } else {
         node
           .select('text')
-          .attr('opacity', 1);
+          .style('opacity', 1);
       }
     })
 
@@ -334,17 +334,23 @@
             .select('rect')
             .style('opacity', '0.5')
 
-          node
-            .select('text')
-            .style('opacity', '0.5')
+
+          if (node.select('text').style('opacity') !== '0'){
+            node
+              .select('text')
+              .style('opacity', '0.5')
+
+            d3.select(this)
+              .select('text')
+              .style('opacity', '1')
+          }
+
 
           d3.select(this)
             .select('rect')
             .style('opacity', '0.9')
 
-          d3.select(this)
-            .select('text')
-            .style('opacity', '1')
+          
 
           let i2 = 0;
           link.each(d2 => {
@@ -363,9 +369,13 @@
             .select('rect')
             .style('opacity', '0.9')
 
-          node
-            .select('text')
-            .style('opacity', '1')
+          if (node.select('text').style('opacity') !== '0'){
+            node
+              .select('text')
+              .style('opacity', '1')
+          }
+
+          
 
           link
             .style('opacity', '')

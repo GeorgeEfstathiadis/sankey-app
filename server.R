@@ -421,8 +421,9 @@ server <- function(input, output, session){
       data2 <- data2 %>%
         rename('PATHNAME_ENCODED' = isolate(input$pathname))
     }
-    
-    data2[!is.na(data2$PATHNO_ENCODED) & !is.na(data2$NODE_S_ENCODED) & !is.na(data2$NODE_E_ENCODED) & !is.na(data2$USUBJID_ENCODED),]
+    data2[is.na(data2$NODE_S_ENCODED),'NODE_S_ENCODED'] <- 'Missing'
+    data2[is.na(data2$NODE_E_ENCODED),'NODE_E_ENCODED'] <- 'Missing'
+    data2[!is.na(data2$PATHNO_ENCODED) & !is.na(data2$USUBJID_ENCODED),]
   })
   
   
