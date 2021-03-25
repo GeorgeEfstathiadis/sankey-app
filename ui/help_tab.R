@@ -34,6 +34,11 @@ tabItem(tabName = "help",
                          </p>'),
                 downloadButton("download_wide",
                               label = "Template"),
+                HTML('<p>
+                         If data in long format, meaning one row per subject per timepoint with each row having a timepoint, node location and subject id column you may use the following template to convert your data in R and prepare them for use.
+                         </p>'),
+                downloadButton("download_long",
+                              label = "Template"),
                 textOutput("keep_alive"),
                 width = 12))
               

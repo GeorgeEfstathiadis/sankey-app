@@ -309,25 +309,29 @@ output$LinkSizeTable <- renderDataTable({
     )
 
 	links <- tableDataGen('link') %>%
-    	select(PATHNO_ENCODED, ORIGIN, NODE_S_ENCODED, NODE_E_ENCODED, value)
+  	select(PATHNO_ENCODED, ORIGIN, NODE_S_ENCODED, NODE_E_ENCODED, value)
+  
+  if (isolate(input$remove_missing)){
+    links <- links %>%
+      filter(NODE_S_ENCODED != 'Missing' & NODE_E_ENCODED != 'Missing')
+  }
+  colnames(links) <- c('Path Number', 'Origin Node', 'Start Node', 'End Node', 'Size')
 
-    colnames(links) <- c('Path Number', 'Origin Node', 'Start Node', 'End Node', 'Size')
-
-    DT::datatable(links, 
-                  extensions = c("FixedColumns", "FixedHeader", "Scroller"), 
-                  options = list(
-                    # dom = 't',
-                    # deferRender = TRUE,
-                    searching = TRUE,
-                    autoWidth = TRUE,
-                    # scrollCollapse = TRUE,
-                    rownames = FALSE,
-                    scroller = TRUE,
-                    scrollX = TRUE,
-                    scrollY = "500px",
-                    width = "100%",
-                    class = 'cell-border stripe'
-                  )
+  DT::datatable(links, 
+                extensions = c("FixedColumns", "FixedHeader", "Scroller"), 
+                options = list(
+                  # dom = 't',
+                  # deferRender = TRUE,
+                  searching = TRUE,
+                  autoWidth = TRUE,
+                  # scrollCollapse = TRUE,
+                  rownames = FALSE,
+                  scroller = TRUE,
+                  scrollX = TRUE,
+                  scrollY = "500px",
+                  width = "100%",
+                  class = 'cell-border stripe'
+                )
     )
 })
 
@@ -341,20 +345,25 @@ output$NodeSizeTable <- renderDataTable({
     )
 	nodes <- tableDataGen('node') 
 
-    DT::datatable(nodes, 
-                  extensions = c("FixedColumns", "FixedHeader", "Scroller"), 
-                  options = list(
-                    # dom = 't',
-                    # deferRender = TRUE,
-                    searching = TRUE,
-                    autoWidth = TRUE,
-                    # scrollCollapse = TRUE,
-                    rownames = FALSE,
-                    scroller = TRUE,
-                    scrollX = TRUE,
-                    scrollY = "500px",
-                    width = "100%",
-                    class = 'cell-border stripe'
-                  )
-    )
+  if (isolate(input$remove_missing)){
+    nodes <- nodes %>%
+      filter(Node != 'Missing')
+  }
+
+  DT::datatable(nodes, 
+                extensions = c("FixedColumns", "FixedHeader", "Scroller"), 
+                options = list(
+                  # dom = 't',
+                  # deferRender = TRUE,
+                  searching = TRUE,
+                  autoWidth = TRUE,
+                  # scrollCollapse = TRUE,
+                  rownames = FALSE,
+                  scroller = TRUE,
+                  scrollX = TRUE,
+                  scrollY = "500px",
+                  width = "100%",
+                  class = 'cell-border stripe'
+                )
+  )
 })

@@ -486,6 +486,18 @@
         str_replace('//a', "d3.selectAll('.node').select('text').style('font-weight', 'bold').text(d => d.name + ': ' + d.value);")
     }
 
+    ## Hide node labels
+    if (isolate(input$remove_labels)){
+      js_code <- js_code %>% 
+        str_replace('nodeHide = false', "nodeHide = true")
+    }
+
+    ## Remove Missing
+    if (isolate(input$remove_missing)){
+      js_code <- js_code %>% 
+        str_replace('missing = false', "missing = true")
+    }
+
     ## Timepoints on graph
     if (isolate(input$timepoint_labels)){
       if (dates != ''){

@@ -12,6 +12,25 @@
   let link = d3.selectAll('.link');
   let node = d3.selectAll('.node');
 
+  /* Remove Missing Values */
+    let missing = false;
+    if (missing){
+      node.each(function(){
+        if (d3.select(this).select('text').text() === 'Missing'){
+          d3.select(this).remove()
+        }
+      })
+
+      link.each(function(d){
+        if (d.target.name === 'Missing'||d.source.name === 'Missing'){
+          d3.select(this).remove()
+        }
+      })
+    }
+
+  link = d3.selectAll('.link');
+  node = d3.selectAll('.node');
+
   /* Timepoints on Graph */
   let timex = [];
 
@@ -146,13 +165,9 @@
 
     }
 
-    node
-      .select('text')
-      .attr('opacity', 0);
+    
   } else {
-    node
-      .select('text')
-      .attr('opacity', 1);
+    
 
     d3.select('#legend_here').remove()
     svg.append('g').attr('id', 'legend_here');
@@ -244,19 +259,16 @@
   /* Node Labels Hide */
 
   let nodeHide = false;
-  d3.select('label[for=\"remove_labels\"]')
-    .on('click', d => {
-      nodeHide = !nodeHide;
-      if (nodeHide){
-        node
-          .select('text')
-          .style('opacity', 0);
-      } else {
-        node
-          .select('text')
-          .style('opacity', 1);
-      }
-    })
+  if (nodeHide){
+    node
+      .select('text')
+      .style('opacity', 0);
+  } else {
+    node
+      .select('text')
+      .style('opacity', 1);
+  }
+    
 
 
 
@@ -303,8 +315,8 @@
       tip2.hide(d);
       
       d3.select(this)
-                  .select('rect')
-                  .style('fill', fill);
+        .select('rect')
+        .style('fill', fill);
                   
       //f
       
@@ -384,6 +396,9 @@
             .style('stroke-opacity', '0.2')
         }
       })
+
+
+    
     
     let today = new Date();
     let dd = String(today.getDate()).padStart(2, '0');
@@ -397,10 +412,5 @@
                    .attr('href', 'data:application/octet-stream;base64,' + btoa(d3.select('#SankeyPlot').html()))
                    .attr('download', 'sankey-svg-network-' + today + '.svg')
              });
-
-    
-    
-      
-
  }
  

@@ -3,9 +3,6 @@ library(dplyr)
 # dataset stored in data with each unique subject having one row stored in PatientID column
 # in columns node1, node2 and node3 we have the locations of the subjects at those 3 timepoints
 
-# first make sure that there are no missing values in your nodes and subjects
-# and deal with them before inserting the data in the app
-
 ## store column names for timepoints here
 timepoints <- c('node1', 'node2', 'node3')
 for (i in 1:(length(timepoints)-1))

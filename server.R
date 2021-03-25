@@ -25,6 +25,7 @@ server <- function(input, output, session){
   # load R template for download
   myDir <- tempdir()
   file.copy('www/temp_wide.R', myDir)
+  file.copy('www/temp_long.R', myDir)
 
   # Need server to not prompt H15 error in heroku
   output$keep_alive <- renderText({
@@ -848,6 +849,16 @@ server <- function(input, output, session){
     },
     content = function(file){
       filename <- paste0(myDir, '/temp_wide.R')
+      file.copy(filename, file)
+    }
+  )
+
+  output$download_long <- downloadHandler(
+    filename = function() {
+      return('temp_long.R')
+    },
+    content = function(file){
+      filename <- paste0(myDir, '/temp_long.R')
       file.copy(filename, file)
     }
   )

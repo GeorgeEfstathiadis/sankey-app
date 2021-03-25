@@ -45,6 +45,12 @@
         }
         
       }
+
+      ## Remove Missing
+      if (isolate(input$remove_missing)){
+        data_start_nodes <- data_start_nodes %>%
+          filter(NODE_S_ENCODED != 'Missing')
+      }
       
       ## actual highchart barplot
       data_start_nodes %>%  
@@ -108,6 +114,12 @@
           data_end_nodes <- data_end_nodes[order(-data_end_nodes$size),]
         }
         
+      }
+
+      ## Remove Missing
+      if (isolate(input$remove_missing)){
+        data_end_nodes <- data_end_nodes %>%
+          filter(NODE_E_ENCODED != 'Missing')
       }
       
       data_end_nodes %>%  

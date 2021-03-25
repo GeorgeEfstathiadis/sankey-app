@@ -29,6 +29,13 @@ menuItem("Filters", icon = icon("th-list", lib='glyphicon'), tabName = "filters"
                bsTooltip(id = "timepoint_label",
                 title = 'If the timepoints extracted from the PATHNAME are of correct format they will be placed on top of the graph.'
                 ),
+
+               checkboxInput('remove_missing',
+                              label = tags$span(id = "remove_missing_label", 'Remove Missing')),
+
+               bsTooltip(id = "remove_missing_label",
+                title = 'Remove all missing Nodes and Links from the graph.'
+                ),
                
                br()
       )
