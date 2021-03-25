@@ -151,8 +151,7 @@
       return()
     }
     
-    data_sub <- d() %>%
-      filter_data()
+    data_sub <- data_sub()
     
     high_bar_gen('start', data_sub)
     
@@ -166,8 +165,7 @@
       return()
     }
     
-    data_sub <- d() %>%
-      filter_data()
+    data_sub <- data_sub()
     
     high_bar_gen('end', data_sub)
   })

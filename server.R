@@ -566,6 +566,11 @@ server <- function(input, output, session){
     return(data_sub)
     
   }
+
+  data_sub <- reactive({
+    d() %>%
+      filter_data()
+  })
   
   source(file.path("server", "sankey_function.R"),  local = TRUE)$value
   source(file.path("server", "linktable_function.R"),  local = TRUE)$value
@@ -578,8 +583,7 @@ server <- function(input, output, session){
       return()
     }
     
-    data_sub_subjects <- d() %>%
-      filter_data() %>% 
+    data_sub_subjects <- data_sub() %>% 
       pull('USUBJID_ENCODED') %>% 
       unique() %>%
       length()
@@ -598,8 +602,7 @@ server <- function(input, output, session){
       need(!(isolate(input$timepoint_labels)), '')
       )
 
-    data_sub <- d() %>%
-      filter_data()
+    data_sub <- data_sub()
     
     pathname <- input$pathname
     pathno <- input$pathno
@@ -636,8 +639,7 @@ server <- function(input, output, session){
   ## Add a slider for grouping link colors by timepoint when switching link mode
   observeEvent(c(input$mode_switch, input$path_range),
                {
-                 data_sub <- d() %>%
-                   filter_data()
+                 data_sub <- data_sub()
                  
                  removeUI(
                      selector = 'div:has(> #orig_path)'
@@ -659,8 +661,7 @@ server <- function(input, output, session){
   ## Add a select for grouping link colors by NODE_S or NODE_E when switching link mode 2
   observeEvent(c(input$mode_switch2),
                {
-                 data_sub <- d() %>%
-                   filter_data()
+                 data_sub <- data_sub()
                  
                  removeUI(
                      selector = 'div:has(> #node_s_e)'
@@ -685,8 +686,7 @@ server <- function(input, output, session){
                {
 
                  unfiltered <- d()
-                 data_sub <- unfiltered %>%
-                   filter_data() %>% 
+                 data_sub <- data_sub() %>% 
                    group_by(PATHNO_ENCODED) %>%
                    summarise(n = n_distinct(NODE_S_ENCODED)) 
 
@@ -714,8 +714,7 @@ server <- function(input, output, session){
                     if(input$advanced_top){
                       
 
-                      last_choices <- d() %>%
-                       filter_data() %>% 
+                      last_choices <- data_sub() %>% 
                        filter(PATHNO_ENCODED == max(PATHNO_ENCODED)) %>%
                        summarise(n = n_distinct(NODE_E_ENCODED)) %>%
                        pull(n)

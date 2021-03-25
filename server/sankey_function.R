@@ -6,8 +6,7 @@
     }
     
     
-    data_sub <- d() %>%
-      filter_data()
+    data_sub <- data_sub()
 
 
     ## Pathname config
