@@ -20,6 +20,8 @@ menuItem("Filters", icon = icon("th-list", lib='glyphicon'), tabName = "filters"
                              status = 'primary',
                              right = TRUE),
 
+               tags$div(id='order_option_here'),
+
 
                tags$div(id='path_range_here'),
 

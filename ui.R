@@ -24,6 +24,7 @@ ui <- dashboardPage(
       source(file.path("ui", "filters_item.R"),  local = TRUE)$value,
       source(file.path("ui", "nodes_item.R"),  local = TRUE)$value,
       source(file.path("ui", "links_item.R"),  local = TRUE)$value,
+      source(file.path("ui", "styles_item.R"),  local = TRUE)$value,
       source(file.path("ui", "download_item.R"),  local = TRUE)$value, 
       menuItem("Help", icon = icon("question-sign", lib='glyphicon'), tabName = "help"),
       actionBttn("update", label = "Update Graph", style = "pill", color = "success")

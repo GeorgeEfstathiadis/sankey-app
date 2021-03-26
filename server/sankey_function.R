@@ -178,6 +178,11 @@
       
       ## order them by size
       nodedata_1 <- nodedata_1[order(nodedata_1$size, nodedata_1$name),c(2,1,4,3)] 
+      if (isolate(input$order)){
+        if (isolate(input$order_option == 'Name')){
+          nodedata_1 <- nodedata_1[order(nodedata_1$name, nodedata_1$size),c(2,1,4,3)] 
+        }
+      }
       ## group nodes by size
       if (isolate(input$top_nodes)){
         if (isolate(input$advanced_top)){
@@ -212,6 +217,11 @@
       merge(path, by = 'name') 
     
     nodedata_1 <- nodedata_1[order(nodedata_1$size, nodedata_1$name),c(2,1,4,3)] 
+    if (isolate(input$order)){
+      if (isolate(input$order_option == 'Name')){
+        nodedata_1 <- nodedata_1[order(nodedata_1$name, nodedata_1$size),c(2,1,4,3)] 
+      }
+    }
 
     if (isolate(input$top_nodes)){
       if (isolate(input$advanced_top)){
@@ -306,6 +316,11 @@
     
     
     links <- links[order(links$PATHNO_ENCODED, links$value),] 
+    if (isolate(input$order)){
+      if (isolate(input$order_option == 'Name')){
+        links <- links[order(links$PATHNO_ENCODED, links$NODE_S_ENCODED, links$NODE_E_ENCODED),]
+      }
+    }
     
     ## if iteration 0 sankey keeps the order given to it
     ## otherwise it finds the one that makes the links the most visible

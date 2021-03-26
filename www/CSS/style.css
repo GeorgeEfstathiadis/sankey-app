@@ -15,3 +15,7 @@ hr {
 #keep_alive {
 	visibility: hidden;
 }
+
+div.wrapper{
+	overflow: visible;
+}

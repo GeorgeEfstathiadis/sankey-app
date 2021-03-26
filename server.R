@@ -567,7 +567,7 @@ server <- function(input, output, session){
     
   }
 
-  data_sub <- reactive({
+  data_sub <- eventReactive(input$update,{
     d() %>%
       filter_data()
   })
@@ -674,6 +674,28 @@ server <- function(input, output, session){
                                           label = 'Grouping Selection', 
                                           choices = prettyNum(c('NODE_S', 'NODE_E'), big.mark = ","),
                                           selected = 'NODE_S',
+                                          grid = FALSE, dragRange = FALSE)
+                   )
+                 }
+                 
+               })
+
+  ## Add a choice for order by size or name when order switch on
+  observeEvent(c(input$order),
+               {
+                 data_sub <- data_sub()
+                 
+                 removeUI(
+                     selector = 'div:has(> #order_option)'
+                   )
+                 if (input$order){
+                   insertUI(
+                     selector = '#order_option_here',
+                     where = 'afterEnd',
+                     ui = sliderTextInput('order_option',
+                                          label = 'Order Option', 
+                                          choices = prettyNum(c('Size', 'Name'), big.mark = ","),
+                                          selected = 'Size',
                                           grid = FALSE, dragRange = FALSE)
                    )
                  }
