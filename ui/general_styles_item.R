@@ -1,0 +1,43 @@
+menuItem("General Styles", icon = icon("th-list", lib='glyphicon'), tabName = "general styles",
+
+    h5('Title'),
+    materialSwitch("general_title",
+        label = "Add Title",
+        status = 'primary',
+        right = TRUE),
+    div(id = 'general_title_here'),
+
+    hr(),
+
+    h5('Footnote'),
+    materialSwitch("general_footnote",
+        label = "Add Footnote",
+        status = 'primary',
+        right = TRUE),
+    div(id = 'general_footnote_here'),
+    hr(),
+
+    h5('Margin'),
+    sliderTextInput('margin_top',
+                  label = 'Margin Top', 
+                  choices = prettyNum(0:300, big.mark = ","),
+                  selected = '50',
+                  grid = FALSE, dragRange = FALSE),
+    sliderTextInput('margin_bottom',
+                  label = 'Margin Bottom', 
+                  choices = prettyNum(0:300, big.mark = ","),
+                  selected = '150',
+                  grid = FALSE, dragRange = FALSE),
+    sliderTextInput('margin_left',
+                  label = 'Margin Left', 
+                  choices = prettyNum(0:300, big.mark = ","),
+                  selected = '0',
+                  grid = FALSE, dragRange = FALSE),
+    sliderTextInput('margin_right',
+                  label = 'Margin Right', 
+                  choices = prettyNum(0:300, big.mark = ","),
+                  selected = '0',
+                  grid = FALSE, dragRange = FALSE),  
+
+    br()
+)

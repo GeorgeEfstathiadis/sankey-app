@@ -178,11 +178,6 @@
       
       ## order them by size
       nodedata_1 <- nodedata_1[order(nodedata_1$size, nodedata_1$name),c(2,1,4,3)] 
-      if (isolate(input$order)){
-        if (isolate(input$order_option == 'Name')){
-          nodedata_1 <- nodedata_1[order(nodedata_1$name, nodedata_1$size),c(2,1,4,3)] 
-        }
-      }
       ## group nodes by size
       if (isolate(input$top_nodes)){
         if (isolate(input$advanced_top)){
@@ -217,11 +212,6 @@
       merge(path, by = 'name') 
     
     nodedata_1 <- nodedata_1[order(nodedata_1$size, nodedata_1$name),c(2,1,4,3)] 
-    if (isolate(input$order)){
-      if (isolate(input$order_option == 'Name')){
-        nodedata_1 <- nodedata_1[order(nodedata_1$name, nodedata_1$size),c(2,1,4,3)] 
-      }
-    }
 
     if (isolate(input$top_nodes)){
       if (isolate(input$advanced_top)){
@@ -240,6 +230,13 @@
     
     row.names(nodedata_ord) <- NULL
     no_nodes <- nrow(nodedata_ord)
+
+    ## Order Nodedata by name
+    if (isolate(input$order)){
+      if (isolate(input$order_option == 'Name')){
+        nodedata_ord <- nodedata_ord[order(nodedata_ord$timepoint, nodedata_ord$name),] 
+      }
+    }
     nodedata_ord$node_ord <- (1:no_nodes-1)
     
     ## Redo the link creation but with known order
@@ -461,13 +458,18 @@
     }
     
     my_color <- paste0('d3.scaleOrdinal().domain([',node_groups,', ',link_groups,']).range([',node_colours,', ',link_colours,'])')
+    margin = list(top = isolate(input$margin_top),
+      bottom = isolate(input$margin_bottom),
+      left = isolate(input$margin_left),
+      right = isolate(input$margin_right))
     #Sankey
-    
     sankey <- sankeyNetwork(Links = links, Nodes = nodedata_ord,
                             Source = "node_ord.x", Target = "node_ord.y",
                             Value = "value", NodeID = "name", LinkGroup = link_group, NodeGroup = "group",
-                            colourScale = my_color,
-                            fontSize = 15, sinksRight = FALSE, height = 600, width = 800, iterations = iterations) 
+                            colourScale = my_color, margin = margin,
+                            fontSize = isolate(input$node_font_size), nodeWidth = isolate(input$node_width),nodePadding = isolate(input$node_padding),
+                            fontFamily = isolate(input$node_font),
+                            sinksRight = FALSE, height = 600, width = 800, iterations = iterations) 
     
     sankey$x$links$ORIGIN <- links$ORIGIN
     sankey$x$links$PATHNO_ENCODED <- links$PATHNO_ENCODED
@@ -476,10 +478,41 @@
     ### along with SVG download and origin tracking
     sankey_js <- "www/JS/sankey.js"
     js_code <- readChar(sankey_js, file.info(sankey_js)$size)
+
+    # Title - footnote
+    if (isolate(input$general_title)){
+      if (isolate(input$general_title_text) != ''){
+        js_code <- js_code %>%
+          str_replace('title = 1', paste0("title = '", isolate(input$general_title_text), "'")) %>%
+          str_replace('title_font', paste0("title_font = '", isolate(input$general_title_font), "'")) %>%
+          str_replace('title_size', paste0("title_size = ", isolate(input$general_title_font_size))) %>%
+          str_replace('title_x', paste0("title_x = ", isolate(input$general_title_x)))
+      }
+    }
+
+    if (isolate(input$general_footnote)){
+      if (isolate(input$general_footnote_text) != ''){
+        js_code <- js_code %>%
+          str_replace('footnote = 1', paste0("footnote = '", isolate(input$general_footnote_text), "'")) %>%
+          str_replace('footnote_font', paste0("footnote_font = '", isolate(input$general_footnote_font), "'")) %>%
+          str_replace('footnote_size', paste0("footnote_size = ", isolate(input$general_footnote_font_size))) 
+      }
+    }
     
     
+    # Margins 
+    js_code <- js_code %>%
+      str_replace('margin_top', paste0('margin_top = ', isolate(input$margin_top))) %>%
+      str_replace('margin_left', paste0('margin_left = ', isolate(input$margin_left))) %>%
+      str_replace('margin_right', paste0('margin_right = ', isolate(input$margin_right))) %>%
+      str_replace('margin_bottom', paste0('margin_bottom = ', isolate(input$margin_bottom))) 
+
     # Switch js_code if link mode switch is on
-    if (isolate(input$mode_switch)){
+    if (isolate(input$link_static_opacity)){
+      js_code <- js_code %>%
+        str_replace('powerBI = true', 'powerBI = false') %>% 
+        str_replace('//g', paste0("link.style('stroke-opacity', ", isolate(input$link_static_opacity_num), ")"))
+    } else if (isolate(input$mode_switch)){
       
     } else if (isolate(input$mode_switch2)){
       js_code <- js_code %>%
@@ -493,11 +526,19 @@
         str_replace('//f', "link.style('stroke-opacity', 0.2)")
     }
 
+    # Node Opacity
+    if (isolate(input$node_static_opacity)){
+      js_code <- js_code %>%
+        str_replace('powerBI = true', 'powerBI = false') %>% 
+        str_replace('//h', paste0("node.select('rect').style('opacity', ", isolate(input$node_static_opacity_num), ")"))
+    }
+
     
     ## Show node sizes
     if (isolate(input$node_show)){
       js_code <- js_code %>% 
-        str_replace('//a', "d3.selectAll('.node').select('text').style('font-weight', 'bold').text(d => d.name + ': ' + d.value);")
+        str_replace('units = 1', paste0("units = '", isolate(input$node_units), "'")) %>%
+        str_replace('//a', "d3.selectAll('.node').select('text').style('font-weight', 'bold').text(d => d.name + ': ' + d.value + units);")
     }
 
     ## Hide node labels
@@ -523,7 +564,15 @@
          str_replace("\\)'", '')
 
         js_code <- js_code %>% 
-          str_replace('0.0001', dates)
+          str_replace('0.0001', dates) %>%
+          str_replace('1vw', paste0(isolate(input$timepoints_font_size), 'vw')) %>%
+          str_replace('xcoord', paste0('xcoord = ', isolate(input$timepoints_x)))
+
+        if (isolate(input$timepoints_font) != ''){
+          js_code <- js_code %>%
+            str_replace('//i', paste0(".attr('font-family', '", isolate(input$timepoints_font), "')"))
+        }
+
       }
       
     }
@@ -532,16 +581,14 @@
     if (isolate(input$node_unique)){
       if (isolate(input$legend)){
         js_code <- js_code %>%
-          str_replace('legend_bool = false', 'legend_bool = true')
-      } else {
-        js_code <- js_code %>%
-          str_replace('legend_bool = true', 'legend_bool = false')
+          str_replace('legend_bool = false', 'legend_bool = true') %>%
+          str_replace('legend_size', paste0('legend_size = ', isolate(input$legend_font_size))) %>%
+          str_replace('legend_font', paste0("legend_font = '", isolate(input$legend_font), "'")) %>%
+          str_replace('legend_nrow', paste0('legend_nrow = ', isolate(input$legend_nrow))) %>%
+          str_replace('legend_x', paste0('legend_x = ', isolate(input$legend_x))) %>%
+          str_replace('legend_title', paste0("legend_title = '", isolate(input$legend_title), "'"))
       }
-    } else {
-      js_code <- js_code %>%
-          str_replace('legend_bool = true', 'legend_bool = false')
-    }
-
+    } 
 
 
     sankey <- onRender(sankey,js_code)

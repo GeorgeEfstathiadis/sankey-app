@@ -661,7 +661,6 @@ server <- function(input, output, session){
   ## Add a select for grouping link colors by NODE_S or NODE_E when switching link mode 2
   observeEvent(c(input$mode_switch2),
                {
-                 data_sub <- data_sub()
                  
                  removeUI(
                      selector = 'div:has(> #node_s_e)'
@@ -683,7 +682,6 @@ server <- function(input, output, session){
   ## Add a choice for order by size or name when order switch on
   observeEvent(c(input$order),
                {
-                 data_sub <- data_sub()
                  
                  removeUI(
                      selector = 'div:has(> #order_option)'
@@ -700,6 +698,46 @@ server <- function(input, output, session){
                    )
                  }
                  
+               })
+
+  ## Add a slider for link opacity
+  observeEvent(input$link_static_opacity,
+               {
+                 
+                 removeUI(
+                     selector = 'div:has(> #link_static_opacity_num)'
+                   )
+                 if (input$link_static_opacity){
+                   insertUI(
+                     selector = '#link_static_opacity_here',
+                     where = 'afterEnd',
+                     ui = sliderTextInput('link_static_opacity_num',
+                                          label = 'Opacity', 
+                                          choices = prettyNum((1:10)/10, big.mark = ","),
+                                          selected = '0.2',
+                                          grid = FALSE, dragRange = FALSE)
+                   )
+                 }
+               })
+
+  ## Add a slider for node opacity
+  observeEvent(input$node_static_opacity,
+               {
+                 
+                 removeUI(
+                     selector = 'div:has(> #node_static_opacity_num)'
+                   )
+                 if (input$node_static_opacity){
+                   insertUI(
+                     selector = '#node_static_opacity_here',
+                     where = 'afterEnd',
+                     ui = sliderTextInput('node_static_opacity_num',
+                                          label = 'Opacity', 
+                                          choices = prettyNum((1:10)/10, big.mark = ","),
+                                          selected = '0.9',
+                                          grid = FALSE, dragRange = FALSE)
+                   )
+                 }
                })
   
   
@@ -845,6 +883,245 @@ server <- function(input, output, session){
       removeUI(
         selector = 'div:has(> div:has(> label:has(> #legend)))'
         )
+    }
+
+
+  })
+
+  ## legend styles
+  observeEvent(input$legend, {
+
+    removeUI(
+      selector = 'div:has(> #legend_title)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #legend_font_size)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #legend_font)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #legend_x)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #legend_nrow)'
+      )
+
+
+    if (input$legend){
+      insertUI(
+               selector = '#legend_style_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('legend_x',
+                                    label = 'x coordinate', 
+                                    choices = prettyNum(-100:100, big.mark = ","),
+                                    selected = '0',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#legend_style_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('legend_nrow',
+                                    label = 'Number per column', 
+                                    choices = prettyNum(1:10, big.mark = ","),
+                                    selected = '4',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#legend_style_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('legend_font_size',
+                                    label = 'Text Size', 
+                                    choices = prettyNum(1:30, big.mark = ","),
+                                    selected = '15',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#legend_style_here',
+               where = 'afterEnd',
+               ui = textInput("legend_font",
+                                 label = "Text Font",
+                                 value = "")
+               )
+
+      insertUI(
+               selector = '#legend_style_here',
+               where = 'afterEnd',
+               ui = textInput("legend_title",
+                               label = "Title",
+                               value = "")
+               )
+
+
+
+    
+    }
+
+
+  })
+
+  ## timepoint styles
+  observeEvent(input$timepoint_labels, {
+
+    removeUI(
+      selector = 'div:has(> #timepoints_font_size)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #timepoints_font)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #timepoints_x)'
+      )
+
+    if (input$timepoint_labels){
+
+      insertUI(
+               selector = '#timepoint_style_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('timepoints_x',
+                                    label = 'x coordinate', 
+                                    choices = prettyNum(-50:50, big.mark = ","),
+                                    selected = '-5',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#timepoint_style_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('timepoints_font_size',
+                                    label = 'Text Size', 
+                                    choices = prettyNum((1:50)/10, big.mark = ","),
+                                    selected = '1',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#timepoint_style_here',
+               where = 'afterEnd',
+               ui = textInput("timepoints_font",
+                                 label = "Text Font",
+                                 value = "")
+               )
+
+    }
+
+
+  })
+
+  ## General Title Options
+  observeEvent(input$general_title, {
+
+    removeUI(
+      selector = 'div:has(> #general_title_font_size)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #general_title_font)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #general_title_x)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #general_title_text)'
+      )
+
+    if (input$general_title){
+
+      insertUI(
+               selector = '#general_title_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('general_title_x',
+                                    label = 'x coordinate', 
+                                    choices = prettyNum(-100:100, big.mark = ","),
+                                    selected = '0',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#general_title_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('general_title_font_size',
+                                    label = 'Text Size', 
+                                    choices = prettyNum((1:50)/10, big.mark = ","),
+                                    selected = '2.5',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#general_title_here',
+               where = 'afterEnd',
+               ui = textInput("general_title_font",
+                                 label = "Text Font",
+                                 value = "")
+               )
+
+      insertUI(
+               selector = '#general_title_here',
+               where = 'afterEnd',
+               ui = textInput("general_title_text",
+                                 label = "Title Text",
+                                 value = "")
+               )
+
+    }
+
+
+  })
+
+  ## General Footnote Options
+  observeEvent(input$general_footnote, {
+
+    removeUI(
+      selector = 'div:has(> #general_footnote_font_size)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #general_footnote_font)'
+      )
+
+    removeUI(
+      selector = 'div:has(> #general_footnote_text)'
+      )
+
+    if (input$general_footnote){
+
+      insertUI(
+               selector = '#general_footnote_here',
+               where = 'afterEnd',
+               ui = sliderTextInput('general_footnote_font_size',
+                                    label = 'Text Size', 
+                                    choices = prettyNum((1:50)/10, big.mark = ","),
+                                    selected = '1',
+                                    grid = FALSE, dragRange = FALSE)
+               )
+
+      insertUI(
+               selector = '#general_footnote_here',
+               where = 'afterEnd',
+               ui = textInput("general_footnote_font",
+                                 label = "Text Font",
+                                 value = "")
+               )
+
+      insertUI(
+               selector = '#general_footnote_here',
+               where = 'afterEnd',
+               ui = textInput("general_footnote_text",
+                                 label = "Footnote Text",
+                                 value = "")
+               )
+
     }
 
 

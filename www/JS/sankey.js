@@ -4,13 +4,18 @@
 
   let svg = d3.select('svg');
 
-  svg.attr('viewBox', "0,0,1287.546875,940")
-  
+  let margin_top;
+  let margin_bottom;
+  let margin_right;
+  let margin_left;
+
   d3.select('#legend_here').remove()
   svg.append('g').attr('id', 'legend_here');
 
   let link = d3.selectAll('.link');
   let node = d3.selectAll('.node');
+
+  
 
   /* Remove Missing Values */
     let missing = false;
@@ -33,7 +38,7 @@
 
   /* Timepoints on Graph */
   let timex = [];
-
+  let xcoord;
   node.each(function(d,i) {
     let str = d3.select(this).attr("transform");
     str = str.match("([0-9]*\\.?[0-9]*),")[1];
@@ -51,13 +56,52 @@
     for (let x = 0; x < timex.length; x++){
       timepoints
         .append('text')
-        .attr('transform', 'translate('+(timex[x]-5)+',-5)')
+        .attr('transform', 'translate('+(timex[x]+xcoord)+',-5)')
         .attr('font-size', '1vw')
+        //i
         .attr('font-weight', 'bold')
         .text(time_labels[x])
     }
   }
 
+  /* Title */
+  const average = list => list.reduce((prev, curr) => prev + curr) / list.length;
+
+  let average_x = average(timex);
+  let title = 1;
+  if (title !== 1){
+    let title_font;
+    let title_size;
+    let title_x;
+
+    average_x = average_x + title_x;
+
+    svg.select('g')
+      .append('text')
+      .attr('transform', 'translate(' + average_x +', -' + margin_top/2 + ')')
+      .attr('font-size', title_size+'vw')
+      .attr('font-weight', 'bold')
+      .attr('font-family', title_font)
+      .text(title)
+
+  }
+  
+  /* Footnote */
+  let footnote = 1;
+  if (footnote !== 1){
+    let footnote_font;
+    let footnote_size;
+
+    let footnote_y = 820;
+
+    svg.append('g')
+      .append('text')
+      .attr('transform', 'translate(0, ' + footnote_y + ')')
+      .attr('font-size', footnote_size+'vw')
+      .attr('font-family', footnote_font)
+      .text(footnote)
+
+  }
   /* Legend */
 
   let legend_bool = false;
@@ -67,6 +111,17 @@
     
 
     let legend = d3.select('#legend_here');
+    let legend_size;
+    let legend_font;
+    let legend_nrow;
+    let legend_x;
+
+    let legend_title;
+    legend.append('text')
+      .attr('transform', 'translate(' + average_x +', '+ (850-margin_bottom) +')')
+      .attr('font-size', '1.25vw')
+      .attr('font-weight', 'bold')
+      .text(legend_title)
 
     let unique_nodes = [];
     let unique_colors = [];
@@ -83,24 +138,25 @@
     let y = 0;
     if (unique_colors.length === unique_nodes.length){
       for (let x = 0; x < unique_nodes.length; x++){
-        if (Math.floor(x/4) === y + 1){
+        if (Math.floor(x/legend_nrow) === y + 1){
           larg_width = larg_width + 50;
           distance = distance + larg_width;
           larg_width = 0;
         }
 
-        y = Math.floor(x/4);
+        y = Math.floor(x/legend_nrow);
         legend.append("circle")
-          .attr("cx",60 + distance)
-          .attr("cy",830 + 30*(x-4*y))
-          .attr("r", 6)
+          .attr("cx",legend_x + distance)
+          .attr("cy",870-margin_bottom + 30*(x-legend_nrow*y))
+          .attr("r", 0.4*legend_size)
           .style("fill", unique_colors[x])
         
         legend.append("text")
-          .attr("x", 80 + distance)
-          .attr("y", 830 + 30*(x-4*y))
+          .attr("x", legend_x + 20 + distance)
+          .attr("y", 870-margin_bottom + 30*(x-legend_nrow*y))
           .text(unique_nodes[x])
-          .style("font-size", "15px")
+          .style("font-size", legend_size+"px")
+          .style("font-family", legend_font)
           .attr("alignment-baseline","middle")
 
         cur_width = legend
@@ -122,6 +178,11 @@
       
 
       legend = d3.select('#legend_here');
+      legend.append('text')
+        .attr('transform', 'translate(' + average_x +', '+ (850-margin_bottom) +')')
+        .attr('font-size', '1.25vw')
+        .attr('font-weight', 'bold')
+        .text(legend_title)
 
 
       let larg_width = 0;
@@ -130,25 +191,26 @@
       let y = 0;
       if (unique_colors.length === unique_nodes.length){
         for (let x = 0; x < unique_nodes.length; x++){
-          if (Math.floor(x/4) === y + 1){
+          if (Math.floor(x/legend_nrow) === y + 1){
             larg_width = larg_width + 50;
             distance = distance + larg_width;
             larg_width = 0;
           }
 
-          y = Math.floor(x/4);
+          y = Math.floor(x/legend_nrow);
           legend.append("circle")
-            .attr("cx",60 + distance)
-            .attr("cy",830 + 30*(x-4*y))
-            .attr("r", 6)
+            .attr("cx",legend_x + distance)
+            .attr("cy",870-margin_bottom + 30*(x-legend_nrow*y))
+            .attr("r", 0.4*legend_size)
             .style("fill", unique_colors[x])
 
           
           legend.append("text")
-            .attr("x", 80 + distance)
-            .attr("y", 830 + 30*(x-4*y))
+            .attr("x", legend_x + 20 + distance)
+            .attr("y", 870-margin_bottom + 30*(x-legend_nrow*y))
             .text((unique_nodes[x].length>10) ? unique_nodes[x].substring(0, 11) + '...' : unique_nodes[x])
-            .style("font-size", "15px")
+            .style("font-size", legend_size+"px")
+            .style("font-family", legend_font)
             .attr("alignment-baseline","middle")
 
           cur_width = legend
@@ -292,6 +354,7 @@
     
   let fill;
   
+  let units = 1;
   //a
   
   node
@@ -330,72 +393,78 @@
       .on("mousedown.drag", null);
 
     let node_op;
-    node
-      .on("click", function(d,i){
-        node_op = d3.select(this)
-          .select('rect')
-          .style('opacity');
-        node_op = parseFloat(node_op);
-        allnodes_op = Math.min(parseFloat(node.nodes()[0].firstChild.style.opacity), 
-                              parseFloat(node.nodes()[1].firstChild.style.opacity));
-
-        
-
-        if ((node_op === 0.9 && allnodes_op === 0.9) || (node_op === 0.5)){
-          node
+    let powerBI = true;
+    if (powerBI === true){
+      node
+        .on("click", function(d,i){
+          node_op = d3.select(this)
             .select('rect')
-            .style('opacity', '0.5')
+            .style('opacity');
+          node_op = parseFloat(node_op);
+          allnodes_op = Math.min(parseFloat(node.nodes()[0].firstChild.style.opacity), 
+                                parseFloat(node.nodes()[1].firstChild.style.opacity));
 
+          
 
-          if (node.select('text').style('opacity') !== '0'){
+          if ((node_op === 0.9 && allnodes_op === 0.9) || (node_op === 0.5)){
             node
-              .select('text')
+              .select('rect')
               .style('opacity', '0.5')
 
-            d3.select(this)
-              .select('text')
-              .style('opacity', '1')
-          }
 
+            if (node.select('text').style('opacity') !== '0'){
+              node
+                .select('text')
+                .style('opacity', '0.5')
 
-          d3.select(this)
-            .select('rect')
-            .style('opacity', '0.9')
-
-          
-
-          let i2 = 0;
-          link.each(d2 => {
-            if (d2.source === d || d2.target == d){
-              link.nodes()[i2].style.strokeOpacity = '0.5';
-              link.nodes()[i2].style.opacity = '';
-            } else {
-              link.nodes()[i2].style.opacity = '0.3';
+              d3.select(this)
+                .select('text')
+                .style('opacity', '1')
             }
-            i2 = i2+1;
-          })
 
 
-        } else if (node_op === 0.9 && allnodes_op === 0.5){
-          node
-            .select('rect')
-            .style('opacity', '0.9')
+            d3.select(this)
+              .select('rect')
+              .style('opacity', '0.9')
 
-          if (node.select('text').style('opacity') !== '0'){
+            
+
+            let i2 = 0;
+            link.each(d2 => {
+              if (d2.source === d || d2.target == d){
+                link.nodes()[i2].style.strokeOpacity = '0.5';
+                link.nodes()[i2].style.opacity = '';
+              } else {
+                link.nodes()[i2].style.opacity = '0.3';
+              }
+              i2 = i2+1;
+            })
+
+
+          } else if (node_op === 0.9 && allnodes_op === 0.5){
             node
-              .select('text')
-              .style('opacity', '1')
+              .select('rect')
+              .style('opacity', '0.9')
+
+            if (node.select('text').style('opacity') !== '0'){
+              node
+                .select('text')
+                .style('opacity', '1')
+            }
+
+            
+
+            link
+              .style('opacity', '')
+
+            link
+              .style('stroke-opacity', '0.2')
           }
-
-          
-
-          link
-            .style('opacity', '')
-
-          link
-            .style('stroke-opacity', '0.2')
-        }
-      })
+        })
+    }
+    
+    //g
+    //h
 
 
     
