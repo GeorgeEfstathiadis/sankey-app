@@ -1126,6 +1126,42 @@ server <- function(input, output, session){
 
 
   })
+
+  ## Prompt Instructions
+  observeEvent(input$manual_colors, {
+
+    removeUI(
+      selector = '#explanation'
+      )
+
+    if (isolate(input$manual_colors)){
+
+      insertUI(
+               selector = '#prompt_explanation',
+               where = 'afterEnd',
+               ui = tags$div(
+                HTML('<p>
+                          Node Colorings:<br>  
+                          <ul>
+                            <li> <b>[color]</b> : Color the node clicked</li>
+                            <li> <b>group:[color]</b> : Color all nodes with same name</li> 
+                            <li> <b>link:[node_s/node_e/origin]:[color]</b> : Color all links with starting node, ending node or origin, respectively
+                            same as the node clicked</li>
+                          </ul>
+                          <br>
+                          Link Colorings:<br>
+                          <ul>
+                            <li> <b>[color]</b> : Color the link clicked</li>
+                          </ul>
+                          <br>
+                          Colors can be names of colors, RGB or hex colors.
+                          </p>'), 
+                id = "explanation")
+               )
+    }
+
+
+  })
   
   
   

@@ -479,6 +479,13 @@
     sankey_js <- "www/JS/sankey.js"
     js_code <- readChar(sankey_js, file.info(sankey_js)$size)
 
+    # Colour prompt 
+    if (isolate(input$manual_colors)){
+      js_code <- js_code %>%
+        str_replace('powerBI = true', 'powerBI = false') %>%
+        str_replace('manual_colors', 'manual_colors = true')
+    }
+
     # Title - footnote
     if (isolate(input$general_title)){
       if (isolate(input$general_title_text) != ''){
@@ -523,7 +530,13 @@
         str_replace('//c', "d3.select(this) .style('stroke-opacity', 0.5);") %>%
         str_replace('//d', "d3.select(this) .style('stroke-opacity', 0.2);") %>%
         str_replace('//e', "if(d.x == 0){link.style('stroke-opacity', l => {return l.ORIGIN == d.name ? 0.5 : 0.2;})}") %>%
-        str_replace('//f', "link.style('stroke-opacity', 0.2)")
+        str_replace('//f', "link.style('stroke-opacity', 0.2)") 
+
+      if (!isolate(input$manual_colors)){
+        js_code <- js_code %>%
+        str_replace('//b', "d3.select(this).select('rect').style('fill', 'red');") %>%
+        str_replace('//b2', "d3.select(this).select('rect').style('fill', fill);")
+      }
     }
 
     # Node Opacity

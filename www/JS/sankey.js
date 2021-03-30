@@ -18,20 +18,20 @@
   
 
   /* Remove Missing Values */
-    let missing = false;
-    if (missing){
-      node.each(function(){
-        if (d3.select(this).select('text').text() === 'Missing'){
-          d3.select(this).remove()
-        }
-      })
+  let missing = false;
+  if (missing){
+    node.each(function(){
+      if (d3.select(this).select('text').text() === 'Missing'){
+        d3.select(this).remove()
+      }
+    })
 
-      link.each(function(d){
-        if (d.target.name === 'Missing'||d.source.name === 'Missing'){
-          d3.select(this).remove()
-        }
-      })
-    }
+    link.each(function(d){
+      if (d.target.name === 'Missing'||d.source.name === 'Missing'){
+        d3.select(this).remove()
+      }
+    })
+  }
 
   link = d3.selectAll('.link');
   node = d3.selectAll('.node');
@@ -138,7 +138,7 @@
     let y = 0;
     if (unique_colors.length === unique_nodes.length){
       for (let x = 0; x < unique_nodes.length; x++){
-        if (Math.floor(x/legend_nrow) === y + 1){
+        if (Math.floor(x/legend_nrow) === (y + 1)){
           larg_width = larg_width + 50;
           distance = distance + larg_width;
           larg_width = 0;
@@ -150,6 +150,7 @@
           .attr("cy",870-margin_bottom + 30*(x-legend_nrow*y))
           .attr("r", 0.4*legend_size)
           .style("fill", unique_colors[x])
+          .attr('class', 'legend_circles')
         
         legend.append("text")
           .attr("x", legend_x + 20 + distance)
@@ -158,9 +159,10 @@
           .style("font-size", legend_size+"px")
           .style("font-family", legend_font)
           .attr("alignment-baseline","middle")
+          .attr('class', 'legend_labels')
 
         cur_width = legend
-          .selectAll('text')
+          .selectAll('.legend_labels')
           .nodes()[x]
           .getBBox()
           .width;
@@ -191,7 +193,7 @@
       let y = 0;
       if (unique_colors.length === unique_nodes.length){
         for (let x = 0; x < unique_nodes.length; x++){
-          if (Math.floor(x/legend_nrow) === y + 1){
+          if (Math.floor(x/legend_nrow) === (y + 1)){
             larg_width = larg_width + 50;
             distance = distance + larg_width;
             larg_width = 0;
@@ -203,6 +205,7 @@
             .attr("cy",870-margin_bottom + 30*(x-legend_nrow*y))
             .attr("r", 0.4*legend_size)
             .style("fill", unique_colors[x])
+            .attr('class', 'legend_circles')
 
           
           legend.append("text")
@@ -212,9 +215,10 @@
             .style("font-size", legend_size+"px")
             .style("font-family", legend_font)
             .attr("alignment-baseline","middle")
+            .attr('class', 'legend_labels')
 
           cur_width = legend
-            .selectAll('text')
+            .selectAll('.legend_labels')
             .nodes()[x]
             .getBBox()
             .width;
@@ -296,17 +300,17 @@
         for (let x = 0; x < linkLength; x++){
           let d = data[x];
           linkText
-              .append('text')
-              .attr('class', 'linkText')
-              .attr('x', -50 + d.source.x + (d.target.x - d.source.x) / 2)
-              .attr('y', 50 + d.source.y + d.sy + (d.target.y + d.ty - d.source.y - d.sy) / 2)
-              .attr('dy', '.35em')
-              .attr('text-anchor', 'end')
-              .attr('transform', null)
-              .text('Origin: ' + d.ORIGIN + '/ ' + d.source.name + ' -> ' + d.target.name + ': ' + d.value)
-              .attr('font-weight', 'bold')
-              .attr('text-anchor', 'start')
-              .attr('opacity', 0);
+            .append('text')
+            .attr('class', 'linkText')
+            .attr('x', -50 + d.source.x + (d.target.x - d.source.x) / 2)
+            .attr('y', 50 + d.source.y + d.sy + (d.target.y + d.ty - d.source.y - d.sy) / 2)
+            .attr('dy', '.35em')
+            .attr('text-anchor', 'end')
+            .attr('transform', null)
+            .text('Origin: ' + d.ORIGIN + '/ ' + d.source.name + ' -> ' + d.target.name + ': ' + d.value)
+            .attr('font-weight', 'bold')
+            .attr('text-anchor', 'start')
+            .attr('opacity', 0);
         } 
       }
       if (linkShow){
@@ -366,20 +370,18 @@
       fill = d3.select(this)
                   .select('rect')
                   .style('fill');
-                  
-      d3.select(this)
-                  .select('rect')
-                  .style('fill', 'red');
+
+      //b
 
       //e
 
     })
     .on('mouseout',function(d){
       tip2.hide(d);
+
+      //b2
       
-      d3.select(this)
-        .select('rect')
-        .style('fill', fill);
+      
                   
       //f
       
@@ -462,6 +464,89 @@
           }
         })
     }
+
+    /* Manual Input Node/Link Colours */
+    let manual_colors;
+    if (manual_colors){
+      node
+        .on('click', function(d){
+          let node_fill = d3.select(this)
+            .select('rect')
+            .style('fill');
+          let node_fill2 = prompt("Enter Node Colour: ", node_fill);
+          if (node_fill2.includes('group:')){
+            node_fill2 = node_fill2.split(':')[1]
+            let i3 = 0;
+            node.each(d2 => {
+              if (d2.name === d.name){
+                node.select('rect').nodes()[i3].style.fill = node_fill2;
+              }
+              i3 = i3+1;
+            })
+
+          } else if (node_fill2.includes('link:')){
+            let node_group = node_fill2.split(':')[1];
+            node_fill2 = node_fill2.split(':')[2];
+            let i4 = 0;
+
+            if (node_group === 'node_s'){
+
+              link.each(d2 => {
+                if (d2.source.name === d.name){
+                  link.nodes()[i4].style.stroke = node_fill2;
+                }
+                i4 = i4+1;
+              })
+
+            } else if (node_group === 'node_e'){
+
+              link.each(d2 => {
+                if (d2.target.name === d.name){
+                  link.nodes()[i4].style.stroke = node_fill2;
+                }
+                i4 = i4+1;
+              })
+
+            } else if (node_group === 'origin'){
+
+              link.each(d2 => {
+                if (d2.ORIGIN === d.name){
+                  link.nodes()[i4].style.stroke = node_fill2;
+                }
+                i4 = i4+1;
+              })
+
+            } else {
+              alert("Not a correct link grouping format.");
+            }
+           
+          } else {
+            d3.select(this)
+              .select('rect')
+              .style('fill', node_fill2)
+          }
+        })
+
+      link
+        .on('click', function(d){
+          let link_fill = d3.select(this)
+            .style('stroke');
+          let link_fill2 = prompt("Enter Link Colour: ", link_fill);
+          d3.select(this)
+            .style('stroke', link_fill2)
+        })
+
+      d3.selectAll('.legend_circles')
+        .on('click', function(d){
+          let circle_fill = d3.select(this)
+            .style('fill');
+          let circle_fill2 = prompt("Enter Circle Colour: ", circle_fill);
+          d3.select(this)
+            .style('fill', circle_fill2);
+        })
+    }
+    
+    
     
     //g
     //h

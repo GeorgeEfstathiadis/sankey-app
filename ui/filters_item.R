@@ -38,6 +38,13 @@ menuItem("Filters", icon = icon("th-list", lib='glyphicon'), tabName = "filters"
                bsTooltip(id = "remove_missing_label",
                 title = 'Remove all missing Nodes and Links from the graph.'
                 ),
+
+               checkboxInput('manual_colors',
+                              label = tags$span(id = "manual_colors_label", 'Prompt Manual Color Editing')),
+
+               bsTooltip(id = "manual_colors_label",
+                title = 'Click on any node or link to change its color.'
+                ),
                
                br()
       )

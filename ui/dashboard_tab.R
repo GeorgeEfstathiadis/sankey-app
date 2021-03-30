@@ -9,6 +9,7 @@ tabItem(tabName = "dashboard",
               br(),
               br(),
               br(),
+              div(id = 'prompt_explanation'),
               fluidRow(
                 column(6,
                   box(DT::dataTableOutput("LinkSizeTable"),
