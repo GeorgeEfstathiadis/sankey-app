@@ -12,7 +12,20 @@ tabItem(tabName = "inputs",
                            pickerInput('pathno', 'Select Path Number', choices = c(), options = list(title = "Nothing Selected", `live-search` = TRUE))
               ),
               box(tags$u(h3('Optional Choices', align='left')),
-                  pickerInput('pathname', 'Select Path Name', choices = c(), options = list(title = "Nothing Selected", `live-search` = TRUE)),
-                  pickerInput('filters', 'Select Filters to display', choices = c(), multiple = TRUE, options = list(`selected-text-format` = "count > 2", `live-search` = TRUE))))
+                  pickerInput('pathname', 
+                    'Select Path Name', 
+                    choices = c(),
+                     options = list(title = "Nothing Selected", 
+                      `live-search` = TRUE)),
+                  pickerInput('filters',
+                   'Select Filters to display', 
+                   choices = c(),
+                   multiple = TRUE, 
+                   options = list(`selected-text-format` = "count > 2", 
+                    `live-search` = TRUE)))),
+              tags$footer(
+                hr(),
+                p("Copyright 2021 Eli Lilly and Company - Georgios Efstathiadis")
+                )
               
       )

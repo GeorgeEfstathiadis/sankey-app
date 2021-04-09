@@ -40,7 +40,11 @@ tabItem(tabName = "help",
                 downloadButton("download_long",
                               label = "Template"),
                 textOutput("keep_alive"),
-                width = 12))
+                width = 12)),
+              tags$footer(
+                hr(),
+                p("Copyright 2021 Eli Lilly and Company - Georgios Efstathiadis")
+                )
               
               
       )

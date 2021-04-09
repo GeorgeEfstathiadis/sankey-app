@@ -37,5 +37,9 @@ tabItem(tabName = "dashboard",
               br(),
               hr(),
               fluidRow(column(6,highchartOutput("BarS")),
-                       column(6,highchartOutput("BarE")))
+                       column(6,highchartOutput("BarE"))),
+              tags$footer(
+                hr(),
+                p("Copyright 2021 Eli Lilly and Company - Georgios Efstathiadis")
+                )
       )

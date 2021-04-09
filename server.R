@@ -538,10 +538,10 @@ server <- function(input, output, session){
     data_sub <- missing_data(data_sub)
 
     data_sub <- add_path_perc(data_sub)
-    
+
     data_sub <- data_sub%>%
-      filter(minprc > isolate(input$perc))
-    
+      filter(minprc >= isolate(input$perc))
+
     for (f in input$filters){
       filter_selected <- isolate(input[[paste0(f, '_filter')]])
       if (f %in% c('PATHNO', 'PATHNAME', 'USUBJID', 'NODE_S', 'NODE_E')){
@@ -562,7 +562,8 @@ server <- function(input, output, session){
           filter(!! rlang::parse_expr(filt_expr))
       }
     }
-    
+
+
     return(data_sub)
     
   }
