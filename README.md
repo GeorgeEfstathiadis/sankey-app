@@ -1,6 +1,7 @@
 # Sankey App
 
   [![app](https://img.shields.io/badge/app-Heroku-yellow?style=flat&labelColor=gray)](https://sankey-treatment-patterns.herokuapp.com/)
+  [![app](https://img.shields.io/badge/app-Shiny-yellow?style=flat&labelColor=gray)](https://gefstathiadis.shinyapps.io/sankey-app/)
   [![repo](https://img.shields.io/badge/repo-GitHub-success?style=flat&labelColor=gray)](https://github.com/GeorgeEfstathiadis/sankey-app)
 
 
