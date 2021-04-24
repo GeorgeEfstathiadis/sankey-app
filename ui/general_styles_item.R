@@ -31,12 +31,12 @@ menuItem("General Styles", icon = icon("th-list", lib='glyphicon'), tabName = "g
     sliderTextInput('margin_left',
                   label = 'Margin Left', 
                   choices = prettyNum(0:300, big.mark = ","),
-                  selected = '0',
+                  selected = '50',
                   grid = FALSE, dragRange = FALSE),
     sliderTextInput('margin_right',
                   label = 'Margin Right', 
                   choices = prettyNum(0:300, big.mark = ","),
-                  selected = '0',
+                  selected = '50',
                   grid = FALSE, dragRange = FALSE),  
 
     br()
