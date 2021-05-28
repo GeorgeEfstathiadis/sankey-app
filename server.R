@@ -610,12 +610,10 @@ server <- function(input, output, session){
     
     if (pathname != ''){
       ## getting dates from unique paths
-      dates <- data_sub %>% 
-        pull(PATHNAME_ENCODED) %>%
-        factor() %>%
-        unique() %>% 
-        droplevels() %>%
-        levels()
+      dates <- data_sub[,c("PATHNO_ENCODED", "PATHNAME_ENCODED")] %>% 
+      	unique() 
+
+      dates <- dates[order(dates$PATHNO_ENCODED), "PATHNAME_ENCODED"] 
 
       if (str_detect(dates[1], '-')){
         dates <- dates %>%
