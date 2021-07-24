@@ -14,7 +14,7 @@
   
   You can run the app in 2 ways:
 
-  * It is deployed with heroku [here](https://sankey-treatment-patterns.herokuapp.com/)
+  * It is deployed with heroku [here](http://www.sankeyapp.live/)
   * Run locally with the following R code:   
   ```
   install.packages('shiny') # if shiny not already installed    
